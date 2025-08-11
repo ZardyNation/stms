@@ -2,7 +2,8 @@
 
 import { z } from 'zod';
 import { VOTE_CATEGORIES } from './data';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/server';
+import { revalidatePath } from 'next/cache';
 
 const createVoteSchema = () => {
   const schemaObject = VOTE_CATEGORIES.reduce((acc, category) => {
@@ -11,8 +12,6 @@ const createVoteSchema = () => {
     }
     return acc;
   }, {} as Record<string, z.ZodString>);
-
-  schemaObject.email = z.string().email({ message: 'A valid email is required to vote.' });
 
   return z.object(schemaObject);
 };
@@ -23,7 +22,17 @@ export type FormState = {
 };
 
 export async function submitVote(prevState: FormState, formData: FormData): Promise<FormState> {
+  const supabase = createClient();
   const voteSchema = createVoteSchema();
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      message: 'You must be logged in to vote.',
+      status: 'error',
+    };
+  }
 
   const rawFormData = Object.fromEntries(formData.entries());
   
@@ -38,14 +47,17 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
     };
   }
   
-  const data = parsed.data;
+  const voteData = {
+    ...parsed.data,
+    user_id: user.id,
+  };
 
   try {
-    // Check if the email has already voted
+    // Check if the user has already voted
     const { data: existingVote, error: selectError } = await supabase
       .from('votes')
-      .select('email')
-      .eq('email', data.email)
+      .select('user_id')
+      .eq('user_id', user.id)
       .single();
 
     if (selectError && selectError.code !== 'PGRST116') { // PGRST116: "No rows found"
@@ -54,18 +66,19 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
     if (existingVote) {
       return {
-        message: 'This email address has already been used to vote.',
+        message: 'You have already voted.',
         status: 'error',
       };
     }
     
     // Save the vote to the database
-    const { error: insertError } = await supabase.from('votes').insert([data]);
+    const { error: insertError } = await supabase.from('votes').insert([voteData]);
 
     if (insertError) {
       throw insertError;
     }
 
+    revalidatePath('/');
     return {
       message: 'Thank you for voting! Your submission has been received.',
       status: 'success',
