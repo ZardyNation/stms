@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { AuthButton } from '../auth/AuthButton';
-import { Home } from 'lucide-react';
+import { Home, Pencil } from 'lucide-react';
 import type { Category } from '@/types';
 
 async function getCategories(): Promise<Category[]> {
@@ -93,7 +93,7 @@ export default async function ProfilePage() {
                         <CardDescription>
                             {userVotes 
                                 ? "Here's a summary of the votes you've cast."
-                                : "You have not voted yet. Cast your vote on the main page."
+                                : "You have not voted yet. Click the button below to cast your vote."
                             }
                         </CardDescription>
                     </CardHeader>
@@ -129,7 +129,10 @@ export default async function ProfilePage() {
                      {!userVotes && (
                         <CardContent>
                             <Button asChild>
-                                <Link href="/">Go to Voting Page</Link>
+                                <Link href="/">
+                                    <Pencil className="mr-2" />
+                                    Cast Your Vote
+                                </Link>
                             </Button>
                         </CardContent>
                      )}

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, User } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ThanksPage() {
@@ -15,6 +15,12 @@ export default function ThanksPage() {
           <CardDescription>Thank you for participating. Your vote has been successfully recorded.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
+          <Button asChild>
+            <Link href="/profile">
+              <User className="mr-2" />
+              View Your Profile
+            </Link>
+          </Button>
           <Button variant="outline" asChild>
             <Link href="/">Back to Home</Link>
           </Button>

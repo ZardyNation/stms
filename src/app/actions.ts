@@ -72,7 +72,7 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
   if (Object.keys(filteredFormData).length === 0) {
     return {
-      message: 'Please select at least one nominee to vote.',
+      message: 'You must select at least one nominee to submit your vote.',
       status: 'error',
     };
   }

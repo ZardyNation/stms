@@ -37,6 +37,7 @@ async function getVoteCounts(categories: Category[]) {
   }
 
   const voteCounts: Record<string, Record<string, number>> = {};
+  let totalVotes = 0;
   categories.forEach(category => {
     if (category.tbd) return;
     voteCounts[category.id] = {};
@@ -48,6 +49,7 @@ async function getVoteCounts(categories: Category[]) {
   votes.forEach(vote => {
     Object.keys(vote).forEach(categoryId => {
       if (categoryId in voteCounts) {
+        totalVotes++;
         const nomineeId = vote[categoryId];
         if (nomineeId && nomineeId in voteCounts[categoryId]) {
           voteCounts[categoryId][nomineeId]++;
@@ -56,7 +58,7 @@ async function getVoteCounts(categories: Category[]) {
     });
   });
 
-  return voteCounts;
+  return {counts: voteCounts, total: totalVotes};
 }
 
 async function isAdmin() {
@@ -86,7 +88,7 @@ export default async function AdminPage() {
     }
 
     const categories = await getCategories();
-    const voteCounts = await getVoteCounts(categories);
+    const voteData = await getVoteCounts(categories);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -126,8 +128,13 @@ export default async function AdminPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                        {!voteCounts && <p>Could not retrieve vote counts.</p>}
-                        {voteCounts && categories.filter(c => !c.tbd).map((category: Category) => (
+                        {!voteData && <p>Could not retrieve vote counts.</p>}
+                        {voteData && voteData.total === 0 && (
+                            <div className="text-center text-muted-foreground py-8">
+                                No votes have been cast yet.
+                            </div>
+                        )}
+                        {voteData && voteData.total > 0 && categories.filter(c => !c.tbd).map((category: Category) => (
                            <div key={category.id}>
                                 <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
                                 <div className="rounded-md border">
@@ -145,7 +152,7 @@ export default async function AdminPage() {
                                                     <TableCell className="font-medium">{nominee.name}</TableCell>
                                                     <TableCell>{nominee.organization}</TableCell>
                                                     <TableCell className="text-right text-lg font-bold">
-                                                        {voteCounts[category.id]?.[nominee.id] ?? 0}
+                                                        {voteData.counts[category.id]?.[nominee.id] ?? 0}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
