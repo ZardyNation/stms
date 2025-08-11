@@ -10,6 +10,9 @@ import { Home } from 'lucide-react';
 
 async function getUserVotes() {
   const supabase = createClient();
+  if (!supabase) {
+    return null;
+  }
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -33,6 +36,10 @@ async function getUserVotes() {
 export default async function ProfilePage() {
   const userVotes = await getUserVotes();
   const supabase = createClient();
+  if (!supabase) {
+      return redirect('/login?message=Supabase is not configured. Please check your environment variables.');
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
 
    if (!user) {

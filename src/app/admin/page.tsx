@@ -11,6 +11,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 // For now, we'll keep it simple and check against an environment variable.
 async function isAdmin() {
   const supabase = createClient();
+   if (!supabase) {
+    return false;
+  }
   const { data: { user } } = await supabase.auth.getUser();
   
   // This is a simplified check. A real app should use database roles or claims.
@@ -21,6 +24,9 @@ async function isAdmin() {
 
 export default async function AdminPage() {
     const supabase = createClient();
+    if (!supabase) {
+        return redirect('/login?message=Supabase is not configured. Please check your environment variables.');
+    }
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {

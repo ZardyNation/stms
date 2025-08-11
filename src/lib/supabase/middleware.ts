@@ -13,6 +13,9 @@ export function createClient(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("YOUR_SUPABASE_URL")) {
+    // If Supabase credentials aren't configured, we can't do anything.
+    // Return a null client and the original response.
+    // The middleware will then bypass auth checks.
     return { supabase: null, response }
   }
 

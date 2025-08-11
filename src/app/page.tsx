@@ -9,12 +9,18 @@ import { User, Shield } from 'lucide-react';
 
 async function isAdmin() {
   const supabase = createClient();
+  if (!supabase) {
+    return false;
+  }
   const { data: { user } } = await supabase.auth.getUser();
   return user?.email === process.env.ADMIN_EMAIL;
 }
 
 async function Header() {
   const supabase = createClient();
+  if (!supabase) {
+    return redirect('/login?message=Supabase is not configured. Please check your environment variables.');
+  }
 
   const {
     data: { user },
@@ -64,12 +70,18 @@ export default async function Home() {
   
   const supabase = createClient();
 
+  if (!supabase) {
+    redirect('/login?message=Supabase is not configured. Please check your environment variables.');
+    return; // Add a return to stop execution
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
     redirect('/login');
+    return; // Add a return to stop execution
   }
   
   return (
