@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useActionState } from 'react';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,6 +13,8 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { useActionState } from 'react';
+
 
 interface VotingFormProps {
   categories: Category[];
@@ -41,14 +43,16 @@ const SubmitButton = ({ pending }: { pending: boolean }) => (
   </Button>
 );
 
+const initialState: FormState = {
+  message: '',
+  status: 'idle',
+};
+
 export default function VotingForm({ categories }: VotingFormProps) {
   const voteSchema = createVoteSchema(categories);
   const { toast } = useToast();
 
-  const [state, formAction, isSubmitting] = useActionState<FormState, FormData>(submitVote, {
-    message: '',
-    status: 'idle',
-  });
+  const [state, formAction, isSubmitting] = useActionState<FormState, FormData>(submitVote, initialState);
 
   const form = useForm<z.infer<typeof voteSchema>>({
     resolver: zodResolver(voteSchema),
