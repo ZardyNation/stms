@@ -47,25 +47,24 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
   }
 
   try {
-    // First, check if a vote already exists for this user.
     const { data: existingVote, error: checkError } = await supabase
       .from('votes')
       .select('user_id')
       .eq('user_id', user.id)
       .maybeSingle();
 
-    // If there's an error during the check (and it's not a "no rows" error which is fine)
     if (checkError) {
       console.error('Error checking for existing vote:', checkError);
       return { message: 'A server error occurred while checking your vote. Please try again.', status: 'error' };
     }
 
-    // If a vote already exists, we redirect to the thanks page to prevent confusion and re-voting.
     if (existingVote) {
-      return redirect('/thanks');
+      return {
+        message: 'You have already submitted your vote.',
+        status: 'error',
+      };
     }
 
-    // If no vote exists, proceed to insert the new one.
     const voteData = {
       ...parsed.data,
       user_id: user.id,
@@ -78,7 +77,6 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
       return { message: 'Failed to save your vote to the database. Please try again.', status: 'error' };
     }
 
-    // On successful insertion, revalidate paths and redirect.
     revalidatePath('/');
     revalidatePath('/profile');
     
@@ -90,6 +88,5 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
     };
   }
 
-  // Redirect to the thank you page after a successful vote.
   redirect('/thanks');
 }
