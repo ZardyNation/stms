@@ -35,7 +35,7 @@ export async function saveNominee(formData: FormData): Promise<{ success: boolea
 
   const parsed = nomineeSchema.safeParse({
     ...rawFormData,
-    photo: rawFormData.photo instanceof File ? rawFormData.photo : undefined,
+    photo: rawFormData.photo instanceof File && (rawFormData.photo as File).size > 0 ? rawFormData.photo : undefined,
   });
 
   if (!parsed.success) {
@@ -54,7 +54,7 @@ export async function saveNominee(formData: FormData): Promise<{ success: boolea
       .from('nominee-photos')
       .upload(fileName, photo, {
           cacheControl: '3600',
-          upsert: true, // Overwrite file with same name, useful for updates
+          upsert: true,
       });
 
     if (uploadError) {
@@ -66,8 +66,8 @@ export async function saveNominee(formData: FormData): Promise<{ success: boolea
     photoUrl = publicUrl;
   }
   
-
-  const nomineeData: Omit<Nominee, 'id'> & { id?: string } = {
+  const nomineeData = {
+    id: id || randomUUID(),
     name,
     organization,
     photo: photoUrl,
@@ -77,11 +77,9 @@ export async function saveNominee(formData: FormData): Promise<{ success: boolea
 
   let error;
   if (id) {
-    // Update existing nominee
     const { error: updateError } = await supabase.from('nominees').update(nomineeData).eq('id', id);
     error = updateError;
   } else {
-    // Create new nominee
     const { error: insertError } = await supabase.from('nominees').insert(nomineeData);
     error = insertError;
   }
