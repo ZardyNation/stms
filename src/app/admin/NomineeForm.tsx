@@ -26,12 +26,13 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 const nomineeSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   organization: z.string().min(1, "Organization is required"),
-  photo: z.string().url("Must be a valid URL").optional().or(z.literal('')),
+  photo: z.any().optional(),
   aiHint: z.string().optional(),
   category_id: z.string().min(1, "Category is required"),
 });
@@ -60,7 +61,6 @@ export default function NomineeForm({ nominee, categories, isOpen, onClose }: No
       id: nominee?.id || undefined,
       name: nominee?.name || "",
       organization: nominee?.organization || "",
-      photo: nominee?.photo || "",
       aiHint: nominee?.aiHint || "",
       category_id: nominee?.category_id || "",
     },
@@ -68,7 +68,25 @@ export default function NomineeForm({ nominee, categories, isOpen, onClose }: No
 
   const handleFormSubmit = async (data: NomineeFormData) => {
     setIsSubmitting(true);
-    const result = await saveNominee(data);
+    
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === 'photo') {
+        if (value instanceof FileList && value.length > 0) {
+          formData.append(key, value[0]);
+        }
+      } else if (value !== undefined && value !== null) {
+        formData.append(key, value as string);
+      }
+    });
+
+    // If we are editing and there's an existing photo URL, pass it along
+    if (nominee?.photo && !(data.photo instanceof FileList && data.photo.length > 0)) {
+       formData.append('existing_photo_url', nominee.photo);
+    }
+
+    const result = await saveNominee(formData);
+
     setIsSubmitting(false);
 
     if (result.success) {
@@ -90,9 +108,17 @@ export default function NomineeForm({ nominee, categories, isOpen, onClose }: No
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       onClose();
-      reset();
+      reset({
+        id: nominee?.id || undefined,
+        name: nominee?.name || "",
+        organization: nominee?.organization || "",
+        aiHint: nominee?.aiHint || "",
+        category_id: nominee?.category_id || "",
+        photo: undefined,
+      });
     }
   };
+
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -136,15 +162,29 @@ export default function NomineeForm({ nominee, categories, isOpen, onClose }: No
              {errors.category_id && <p className="text-sm text-destructive">{errors.category_id.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="photo">Photo URL</Label>
-            <Input id="photo" {...register("photo")} placeholder="https://placehold.co/128x128.png"/>
-             {errors.photo && <p className="text-sm text-destructive">{errors.photo.message}</p>}
+           <div className="space-y-2">
+            <Label htmlFor="photo">Photo</Label>
+            {nominee?.photo && (
+              <div className="mb-2">
+                <Image
+                  src={nominee.photo}
+                  alt={`Current photo of ${nominee.name}`}
+                  width={64}
+                  height={64}
+                  className="h-16 w-16 rounded-full object-cover"
+                />
+              </div>
+            )}
+            <Input id="photo" type="file" {...register("photo")} accept="image/*" />
+            <p className="text-xs text-muted-foreground">
+              {nominee?.photo ? "Uploading a new file will replace the current one." : "Upload a photo for the nominee."}
+            </p>
+            {errors.photo && <p className="text-sm text-destructive">{(errors.photo as any).message}</p>}
           </div>
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="outline">
+              <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
                 Cancel
               </Button>
             </DialogClose>

@@ -4,33 +4,73 @@ import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import type { Nominee } from '@/types';
+import { randomUUID } from 'crypto';
+
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 const nomineeSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, 'Name is required'),
   organization: z.string().min(1, 'Organization is required'),
-  photo: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  photo: z
+    .any()
+    .refine((file) => !file || (file instanceof File && file.size <= MAX_FILE_SIZE), `Max image size is 5MB.`)
+    .refine(
+      (file) => !file || (file instanceof File && ACCEPTED_IMAGE_TYPES.includes(file.type)),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ).optional(),
   aiHint: z.string().optional(),
   category_id: z.string().min(1, 'Category is required'),
+  existing_photo_url: z.string().url().optional(),
 });
 
-type NomineeFormData = z.infer<typeof nomineeSchema>;
 
-export async function saveNominee(formData: NomineeFormData): Promise<{ success: boolean; message: string }> {
+export async function saveNominee(formData: FormData): Promise<{ success: boolean; message: string }> {
   const supabase = createClient();
   if (!supabase) return { success: false, message: 'Database connection failed.' };
 
-  const parsed = nomineeSchema.safeParse(formData);
+  const rawFormData = Object.fromEntries(formData.entries());
+
+  const parsed = nomineeSchema.safeParse({
+    ...rawFormData,
+    photo: rawFormData.photo instanceof File ? rawFormData.photo : undefined,
+  });
+
   if (!parsed.success) {
-    return { success: false, message: 'Invalid data submitted.' };
+    console.error('Validation errors:', parsed.error.flatten().fieldErrors);
+    return { success: false, message: 'Invalid data submitted. ' + (parsed.error.flatten().fieldErrors.photo?.[0] ?? '') };
   }
 
-  const { id, name, organization, photo, aiHint, category_id } = parsed.data;
+  const { id, name, organization, photo, aiHint, category_id, existing_photo_url } = parsed.data;
+
+  let photoUrl = existing_photo_url || 'https://placehold.co/128x128.png';
+
+  if (photo instanceof File) {
+    const fileExtension = photo.name.split('.').pop();
+    const fileName = `${randomUUID()}.${fileExtension}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('nominee-photos')
+      .upload(fileName, photo, {
+          cacheControl: '3600',
+          upsert: true, // Overwrite file with same name, useful for updates
+      });
+
+    if (uploadError) {
+      console.error('Error uploading photo:', uploadError);
+      return { success: false, message: 'Failed to upload photo.' };
+    }
+    
+    const { data: { publicUrl } } = supabase.storage.from('nominee-photos').getPublicUrl(uploadData.path);
+    photoUrl = publicUrl;
+  }
+  
 
   const nomineeData: Omit<Nominee, 'id'> & { id?: string } = {
     name,
     organization,
-    photo: photo || 'https://placehold.co/128x128.png',
+    photo: photoUrl,
     aiHint: aiHint || '',
     category_id,
   };
@@ -42,10 +82,7 @@ export async function saveNominee(formData: NomineeFormData): Promise<{ success:
     error = updateError;
   } else {
     // Create new nominee
-    const { error: insertError } = await supabase.from('nominees').insert({
-        ...nomineeData,
-        id: name.toLowerCase().replace(/\s+/g, '-') + '-' + Math.random().toString(36).substring(2, 7)
-    });
+    const { error: insertError } = await supabase.from('nominees').insert(nomineeData);
     error = insertError;
   }
 
