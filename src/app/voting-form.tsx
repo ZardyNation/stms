@@ -1,10 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useActionState } from 'react';
 import Image from 'next/image';
 import { useForm, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/types';
 import { submitVote, type FormState } from './actions';
@@ -13,22 +11,10 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { useActionState } from 'react';
-
 
 interface VotingFormProps {
   categories: Category[];
 }
-
-const createVoteSchema = (categories: Category[]) => {
-  const schemaObject = categories.reduce((acc, category) => {
-    if (!category.tbd) {
-      acc[category.id] = z.string({ required_error: "Please select a nominee." });
-    }
-    return acc;
-  }, {} as Record<string, z.ZodString>);
-  return z.object(schemaObject);
-};
 
 const SubmitButton = ({ pending }: { pending: boolean }) => (
   <Button type="submit" size="lg" className="w-full mt-6" disabled={pending}>
@@ -49,17 +35,13 @@ const initialState: FormState = {
 };
 
 export default function VotingForm({ categories }: VotingFormProps) {
-  const voteSchema = createVoteSchema(categories);
   const { toast } = useToast();
-
   const [state, formAction, isSubmitting] = useActionState<FormState, FormData>(submitVote, initialState);
 
-  const form = useForm<z.infer<typeof voteSchema>>({
-    resolver: zodResolver(voteSchema),
-  });
+  const form = useForm(); // We still need the provider, but we are not using client-side validation for submission.
 
   useEffect(() => {
-    if (state && state.status === 'error') {
+    if (state?.status === 'error') {
       toast({
         title: 'Error',
         description: state.message,
@@ -68,34 +50,31 @@ export default function VotingForm({ categories }: VotingFormProps) {
     }
   }, [state, toast]);
   
-  const { formState: { errors } } = form;
-
   return (
     <FormProvider {...form}>
       <form action={formAction} className="space-y-12 max-w-4xl mx-auto">
         <div className="space-y-8">
-          {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category, index) => (
+          {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category) => (
             <Card key={category.id} className="overflow-hidden">
               <CardHeader className="bg-muted/50">
                 <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
-                 {errors[category.id] && (
-                  <p className="text-sm text-destructive pt-1">{errors[category.id]?.message?.toString()}</p>
+                 {state?.status === 'error' && state.message.includes(category.title) && (
+                  <p className="text-sm text-destructive pt-1">{state.message}</p>
                 )}
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
                 <RadioGroup
-                  name={category.id}
-                  onValueChange={(value) => form.setValue(category.id, value, { shouldValidate: true })}
+                  name={category.id} // Name attribute is essential for FormData
                   className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
                 >
                   {category.nominees.map((nominee) => (
                     <Label
                       key={nominee.id}
-                      htmlFor={nominee.id}
+                      htmlFor={`${category.id}-${nominee.id}`} // Ensure unique IDs for labels
                       className="group relative block cursor-pointer rounded-lg border bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:ring-2 has-[[data-state=checked]]:ring-primary"
                     >
                       <div className="h-full transform transition-transform duration-200 ease-in-out hover:scale-[1.02]">
-                        <RadioGroupItem value={nominee.id} id={nominee.id} className="absolute right-3 top-3 h-5 w-5" />
+                        <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="absolute right-3 top-3 h-5 w-5" />
                         <div className="relative flex flex-col items-center p-4 text-center">
                           <Image
                             src={nominee.photo}

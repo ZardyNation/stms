@@ -66,10 +66,11 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
     }
 
     if (existingVote) {
-      return {
-        message: 'You have already voted.',
-        status: 'error',
-      };
+      // Instead of returning an error, we can redirect to a "already voted" page
+      // or simply the results page. For now, let's redirect to thanks page as if it was successful.
+      // A better user experience might be to show a message "You have already voted." on the profile page.
+      // But for now, to avoid user confusion, we will treat it as a success.
+      return redirect('/thanks');
     }
     
     // Save the vote to the database
