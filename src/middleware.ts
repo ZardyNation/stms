@@ -4,6 +4,11 @@ import { createClient } from '@/lib/supabase/middleware'
 export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request)
 
+  // If supabase is not configured, do not block the request
+  if (!supabase) {
+    return response;
+  }
+
   const {
     data: { session },
   } = await supabase.auth.getSession()
