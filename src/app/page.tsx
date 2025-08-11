@@ -1,128 +1,19 @@
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { VOTE_CATEGORIES, Category as CategoryType } from '@/app/data';
-import { 
-  Briefcase, 
-  Lightbulb, 
-  HeartHandshake, 
-  BookOpen, 
-  Megaphone, 
-  Mic, 
-  Palette, 
-  HelpCircle,
-  Twitter,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Mail,
-  Phone
-} from 'lucide-react';
 import VotingForm from './voting-form';
-
-const iconMap: { [key: string]: React.ElementType } = {
-  'business-award': Briefcase,
-  'entrepreneurship-award': Lightbulb,
-  'community-empowerment-award': HeartHandshake,
-  'ministry-award': BookOpen,
-  'influencer-award': Megaphone,
-  'event-host-of-the-year-award': Mic,
-  'mea-nation-artist-of-the-year-award': Palette,
-  'tbd': HelpCircle,
-};
+import { Separator } from '@/components/ui/separator';
+import { Mail, Phone, Twitter, Facebook, Instagram, Linkedin } from 'lucide-react';
 
 function HeroSection() {
   return (
     <section className="w-full bg-primary text-primary-foreground">
-      <div className="container mx-auto flex flex-col items-center justify-center space-y-6 px-4 py-20 text-center md:py-32">
-        <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-          STOP The Madness Presents: The IA Awards
+      <div className="container mx-auto flex flex-col items-center justify-center space-y-4 px-4 py-16 text-center md:py-24">
+        <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+          The IA Awards
         </h1>
-        <p className="font-headline text-2xl font-medium sm:text-3xl md:text-4xl">(Impact Awards)</p>
-        <p className="max-w-[700px] text-lg text-primary-foreground/90 md:text-xl">
-          Powered by My Event Advisor – Events Made Easy!
+        <p className="font-headline text-xl font-medium sm:text-2xl md:text-3xl">(Impact Awards)</p>
+        <p className="max-w-[700px] text-lg text-primary-foreground/90">
+          Presented by STOP The Madness, Powered by My Event Advisor
         </p>
-        <a href="#vote-form">
-          <Button
-            size="lg"
-            className="bg-foreground text-background transition-transform hover:scale-105 hover:bg-foreground/90 focus-visible:ring-background"
-          >
-            Vote Now
-          </Button>
-        </a>
-      </div>
-    </section>
-  );
-}
-
-function HowItWorksSection() {
-  return (
-    <section className="w-full py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="font-headline text-3xl font-bold tracking-tight md:text-4xl">How Voting Works</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Follow these simple steps to make your voice heard.</p>
-        </div>
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
-          <Card className="text-center">
-            <CardHeader>
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                <span className="font-headline text-2xl font-bold">1</span>
-              </div>
-              <CardTitle className="mt-4 font-headline">Choose Nominees</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>Browse through the categories and select one nominee that you believe has made the biggest impact.</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardHeader>
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                <span className="font-headline text-2xl font-bold">2</span>
-              </div>
-              <CardTitle className="mt-4 font-headline">Enter Your Email</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>You must enter a valid email address to confirm your vote. We respect your privacy.</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardHeader>
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                <span className="font-headline text-2xl font-bold">3</span>
-              </div>
-              <CardTitle className="mt-4 font-headline">Submit Your Vote</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>Once you're happy with your selections, hit the submit button. Each person gets one vote per category.</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CategoriesSection({ categories }: { categories: CategoryType[] }) {
-  return (
-    <section className="w-full bg-secondary py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="font-headline text-3xl font-bold tracking-tight md:text-4xl">Award Categories</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Celebrating excellence and impact across our community.</p>
-        </div>
-        <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
-          {categories.map((category) => {
-            const Icon = iconMap[category.tbd ? 'tbd' : category.id] || HelpCircle;
-            return (
-              <Card key={category.id} className="flex items-center p-4">
-                <Icon className="mr-4 h-8 w-8 text-primary" />
-                <h3 className="font-body text-base font-medium">{category.title}</h3>
-              </Card>
-            );
-          })}
-        </div>
       </div>
     </section>
   );
@@ -193,8 +84,6 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         <HeroSection />
-        <HowItWorksSection />
-        <CategoriesSection categories={categories} />
         <VotingFormSection categories={categories} />
       </main>
       <Footer />
