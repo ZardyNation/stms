@@ -66,20 +66,20 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
     }
 
     if (existingVote) {
-      // Instead of returning an error, we can redirect to a "already voted" page
-      // or simply the results page. For now, let's redirect to thanks page as if it was successful.
-      // A better user experience might be to show a message "You have already voted." on the profile page.
-      // But for now, to avoid user confusion, we will treat it as a success.
+      // The user has already voted. To provide a seamless experience and avoid
+      // confusion, we'll redirect them to the thanks page as if the vote
+      // was successful. This prevents them from being stuck.
       return redirect('/thanks');
     }
     
-    // Save the vote to the database
+    // If no existing vote, insert the new vote into the database
     const { error: insertError } = await supabase.from('votes').insert([voteData]);
 
     if (insertError) {
       throw insertError;
     }
 
+    // Revalidate cached paths to ensure fresh data is shown on results and profile pages
     revalidatePath('/');
     revalidatePath('/results');
     revalidatePath('/profile');
@@ -92,5 +92,7 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
     };
   }
   
+  // If everything is successful, redirect to the thank you page.
+  // This is a "hard" navigation and will break the pending state.
   redirect('/thanks');
 }
