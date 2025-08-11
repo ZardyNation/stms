@@ -60,7 +60,7 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
       return { message: 'A server error occurred while checking your vote. Please try again.', status: 'error' };
     }
 
-    // If a vote already exists, we redirect to the thanks page to prevent confusion.
+    // If a vote already exists, we redirect to the thanks page to prevent confusion and re-voting.
     if (existingVote) {
       return redirect('/thanks');
     }
