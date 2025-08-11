@@ -46,17 +46,20 @@ async function getVoteCounts(categories: Category[]) {
     });
   });
 
-  votes.forEach(vote => {
-    Object.keys(vote).forEach(categoryId => {
-      if (categoryId in voteCounts) {
-        totalVotes++;
-        const nomineeId = vote[categoryId];
-        if (nomineeId && nomineeId in voteCounts[categoryId]) {
-          voteCounts[categoryId][nomineeId]++;
-        }
-      }
-    });
-  });
+  if(votes) {
+      votes.forEach(vote => {
+        Object.keys(vote).forEach(categoryId => {
+          if (categoryId in voteCounts) {
+            const nomineeId = vote[categoryId];
+            if (nomineeId && nomineeId in voteCounts[categoryId]) {
+              voteCounts[categoryId][nomineeId]++;
+              totalVotes++;
+            }
+          }
+        });
+      });
+  }
+
 
   return {counts: voteCounts, total: totalVotes};
 }
