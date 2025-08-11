@@ -3,7 +3,8 @@ export interface Nominee {
   name: string;
   organization: string;
   photo: string;
-  aiHint?: string;
+  aiHint?: string | null;
+  category_id?: string;
 }
 
 export interface Category {

@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server';
-import { VOTE_CATEGORIES } from '../data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
@@ -7,6 +6,23 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { AuthButton } from '../auth/AuthButton';
 import { Home } from 'lucide-react';
+import type { Category } from '@/types';
+
+async function getCategories(): Promise<Category[]> {
+  const supabase = createClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from('categories').select(`
+    id,
+    title,
+    tbd,
+    nominees ( id, name, organization, photo, "aiHint" )
+  `);
+  if (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+  return data as Category[];
+}
 
 async function getUserVotes() {
   const supabase = createClient();
@@ -46,6 +62,8 @@ export default async function ProfilePage() {
     return redirect('/login');
   }
 
+  const categories = await getCategories();
+
   return (
     <div className="flex min-h-screen flex-col">
        <header className="bg-card border-b py-4">
@@ -81,7 +99,7 @@ export default async function ProfilePage() {
                     </CardHeader>
                     {userVotes && (
                         <CardContent className="space-y-6">
-                            {VOTE_CATEGORIES.filter(c => !c.tbd && userVotes[c.id]).map(category => {
+                            {categories.filter(c => !c.tbd && userVotes[c.id]).map(category => {
                                 const nomineeId = userVotes[category.id];
                                 const nominee = category.nominees.find(n => n.id === nomineeId);
 

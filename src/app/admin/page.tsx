@@ -5,11 +5,27 @@ import Link from 'next/link';
 import { AuthButton } from '../auth/AuthButton';
 import { Home, User } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { VOTE_CATEGORIES } from '../data';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Category, Nominee } from '@/types';
+import NomineeManager from './NomineeManager';
 
-async function getVoteCounts() {
+async function getCategories(): Promise<Category[]> {
+  const supabase = createClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from('categories').select(`
+    id,
+    title,
+    tbd,
+    nominees ( id, name, organization, photo, "aiHint" )
+  `);
+  if (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+  return data as Category[];
+}
+
+async function getVoteCounts(categories: Category[]) {
   const supabase = createClient();
   if (!supabase) return null;
 
@@ -20,9 +36,8 @@ async function getVoteCounts() {
     return null;
   }
 
-  // Initialize vote counts for each nominee
   const voteCounts: Record<string, Record<string, number>> = {};
-  VOTE_CATEGORIES.forEach(category => {
+  categories.forEach(category => {
     if (category.tbd) return;
     voteCounts[category.id] = {};
     category.nominees.forEach(nominee => {
@@ -30,7 +45,6 @@ async function getVoteCounts() {
     });
   });
 
-  // Tally the votes
   votes.forEach(vote => {
     Object.keys(vote).forEach(categoryId => {
       if (categoryId in voteCounts) {
@@ -45,22 +59,14 @@ async function getVoteCounts() {
   return voteCounts;
 }
 
-
-// In a real application, you'd have a more robust way of checking for admin roles.
-// This could be a separate table in your database or custom claims in Supabase.
-// For now, we'll keep it simple and check against an environment variable.
 async function isAdmin() {
   const supabase = createClient();
    if (!supabase) {
     return false;
   }
   const { data: { user } } = await supabase.auth.getUser();
-  
-  // This is a simplified check. A real app should use database roles or claims.
-  // You would need to set this environment variable for your admin user's email.
   return user?.email === process.env.ADMIN_EMAIL;
 }
-
 
 export default async function AdminPage() {
     const supabase = createClient();
@@ -79,7 +85,8 @@ export default async function AdminPage() {
         return redirect('/');
     }
 
-    const voteCounts = await getVoteCounts();
+    const categories = await getCategories();
+    const voteCounts = await getVoteCounts(categories);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -110,6 +117,7 @@ export default async function AdminPage() {
         </header>
         <main className="flex-1 bg-muted/20 py-8 sm:py-12">
             <div className="container mx-auto grid gap-8">
+                <NomineeManager categories={categories} />
                 <Card>
                     <CardHeader>
                         <CardTitle>Live Vote Counts</CardTitle>
@@ -119,7 +127,7 @@ export default async function AdminPage() {
                     </CardHeader>
                     <CardContent className="space-y-6">
                         {!voteCounts && <p>Could not retrieve vote counts.</p>}
-                        {voteCounts && VOTE_CATEGORIES.filter(c => !c.tbd).map((category: Category) => (
+                        {voteCounts && categories.filter(c => !c.tbd).map((category: Category) => (
                            <div key={category.id}>
                                 <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
                                 <div className="rounded-md border">
@@ -146,17 +154,6 @@ export default async function AdminPage() {
                                 </div>
                            </div>
                         ))}
-                    </CardContent>
-                </Card>
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Manage Nominees</CardTitle>
-                        <CardDescription>
-                           Functionality to add, edit, and delete nominees is coming soon.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                       <p>The next step is to build forms here to manage the award nominees.</p>
                     </CardContent>
                 </Card>
             </div>

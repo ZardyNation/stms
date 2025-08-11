@@ -2,15 +2,32 @@
 'use server';
 
 import { z } from 'zod';
-import { VOTE_CATEGORIES } from './data';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import type { Category } from '@/types';
 
-const createVoteSchema = () => {
-  const schemaObject = VOTE_CATEGORIES.reduce((acc, category) => {
+async function getCategories(): Promise<Category[]> {
+  const supabase = createClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from('categories').select(`
+    id,
+    title,
+    tbd,
+    nominees ( id, name, organization, photo, "aiHint" )
+  `);
+  if (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+  return data as Category[];
+}
+
+
+const createVoteSchema = async () => {
+  const categories = await getCategories();
+  const schemaObject = categories.reduce((acc, category) => {
     if (!category.tbd) {
-      // Make each category vote optional
       acc[category.id] = z.string().optional();
     }
     return acc;
@@ -26,7 +43,14 @@ export type FormState = {
 
 export async function submitVote(prevState: FormState, formData: FormData): Promise<FormState> {
   const supabase = createClient();
-  const voteSchema = createVoteSchema();
+  const voteSchema = await createVoteSchema();
+
+  if(!supabase) {
+    return {
+      message: 'Database connection failed.',
+      status: 'error',
+    }
+  }
 
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -39,7 +63,6 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
   const rawFormData = Object.fromEntries(formData.entries());
   
-  // Filter out any empty values so we only process the categories the user voted for.
   const filteredFormData = Object.entries(rawFormData).reduce((acc, [key, value]) => {
     if (value) {
       acc[key] = value;

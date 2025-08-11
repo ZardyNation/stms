@@ -1,4 +1,3 @@
-import { VOTE_CATEGORIES } from '@/app/data';
 import VotingForm from './voting-form';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
@@ -6,6 +5,24 @@ import { redirect } from 'next/navigation';
 import { AuthButton } from './auth/AuthButton';
 import Link from 'next/link';
 import { User, Shield } from 'lucide-react';
+import type { Category } from '@/types';
+
+async function getCategories(): Promise<Category[]> {
+  const supabase = createClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from('categories').select(`
+    id,
+    title,
+    tbd,
+    nominees ( id, name, organization, photo, "aiHint" )
+  `);
+  if (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+  return data as Category[];
+}
+
 
 async function isAdmin() {
   const supabase = createClient();
@@ -66,13 +83,11 @@ async function Header() {
 }
 
 export default async function Home() {
-  const categories = VOTE_CATEGORIES;
-  
   const supabase = createClient();
 
   if (!supabase) {
     redirect('/login?message=Supabase is not configured. Please check your environment variables.');
-    return; // Add a return to stop execution
+    return;
   }
 
   const {
@@ -81,9 +96,11 @@ export default async function Home() {
 
   if (!user) {
     redirect('/login');
-    return; // Add a return to stop execution
+    return;
   }
   
+  const categories = await getCategories();
+
   return (
     <div className="bg-background min-h-screen">
       <Header />
