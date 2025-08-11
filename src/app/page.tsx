@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { AuthButton } from './auth/AuthButton';
 import Link from 'next/link';
-import { BarChart, User } from 'lucide-react';
+import { User } from 'lucide-react';
 
 async function Header() {
   const supabase = createClient();
@@ -34,12 +34,6 @@ async function Header() {
               <Link href="/profile">
                 <User className="mr-2 h-4 w-4" />
                 Profile
-              </Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link href="/results">
-                <BarChart className="mr-2 h-4 w-4" />
-                Results
               </Link>
             </Button>
           <AuthButton />

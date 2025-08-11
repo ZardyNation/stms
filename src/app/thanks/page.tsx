@@ -15,9 +15,6 @@ export default function ThanksPage() {
           <CardDescription>Thank you for participating. Your vote has been successfully recorded.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <Button asChild>
-            <Link href="/results">View Live Results</Link>
-          </Button>
           <Button variant="outline" asChild>
             <Link href="/">Back to Home</Link>
           </Button>

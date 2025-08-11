@@ -80,7 +80,6 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
     // On successful insertion, revalidate paths and redirect.
     revalidatePath('/');
-    revalidatePath('/results');
     revalidatePath('/profile');
     
   } catch (error: any) {

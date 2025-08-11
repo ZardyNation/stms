@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { AuthButton } from '../auth/AuthButton';
-import { BarChart, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
 
 async function getUserVotes() {
   const supabase = createClient();
@@ -54,12 +54,6 @@ export default async function ProfilePage() {
                         <Link href="/">
                             <Home className="mr-2 h-4 w-4" />
                             Vote
-                        </Link>
-                    </Button>
-                    <Button variant="ghost" asChild>
-                        <Link href="/results">
-                            <BarChart className="mr-2 h-4 w-4" />
-                            Results
                         </Link>
                     </Button>
                     <AuthButton />
