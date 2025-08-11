@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { AuthButton } from './auth/AuthButton';
+import Link from 'next/link';
+import { BarChart, User } from 'lucide-react';
 
 async function Header() {
   const supabase = createClient();
@@ -27,7 +29,21 @@ async function Header() {
             Welcome, {user.email}
           </p>
         </div>
-        <AuthButton />
+        <div className="flex items-center gap-2">
+           <Button variant="ghost" asChild>
+              <Link href="/profile">
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="/results">
+                <BarChart className="mr-2 h-4 w-4" />
+                Results
+              </Link>
+            </Button>
+          <AuthButton />
+        </div>
       </div>
     </header>
   );

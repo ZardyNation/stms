@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { VOTE_CATEGORIES } from './data';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 const createVoteSchema = () => {
   const schemaObject = VOTE_CATEGORIES.reduce((acc, category) => {
@@ -79,10 +80,9 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
     }
 
     revalidatePath('/');
-    return {
-      message: 'Thank you for voting! Your submission has been received.',
-      status: 'success',
-    };
+    revalidatePath('/results');
+    revalidatePath('/profile');
+    
   } catch (error: any) {
     console.error('Supabase Error:', error);
     return {
@@ -90,4 +90,6 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
       status: 'error',
     };
   }
+  
+  redirect('/thanks');
 }
