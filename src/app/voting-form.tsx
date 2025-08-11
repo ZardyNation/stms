@@ -59,13 +59,13 @@ export default function VotingForm({ categories }: VotingFormProps) {
   });
 
   useEffect(() => {
-    if (state.status === 'success') {
+    if (state && state.status === 'success') {
       toast({
         title: 'Vote Submitted!',
         description: state.message,
       });
       form.reset();
-    } else if (state.status === 'error') {
+    } else if (state && state.status === 'error') {
       toast({
         title: 'Error',
         description: state.message,
