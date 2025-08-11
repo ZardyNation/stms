@@ -2,7 +2,7 @@
 
 import { useEffect, useActionState } from 'react';
 import Image from 'next/image';
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/types';
 import { submitVote, type FormState } from './actions';
@@ -38,12 +38,12 @@ export default function VotingForm({ categories }: VotingFormProps) {
   const { toast } = useToast();
   const [state, formAction, isSubmitting] = useActionState<FormState, FormData>(submitVote, initialState);
 
-  const form = useForm(); // We still need the provider, but we are not using client-side validation for submission.
+  const form = useForm();
 
   useEffect(() => {
-    if (state?.status === 'error') {
+    if (state?.status === 'error' && state.message) {
       toast({
-        title: 'Error',
+        title: 'Error Submitting Vote',
         description: state.message,
         variant: 'destructive',
       });
@@ -64,13 +64,13 @@ export default function VotingForm({ categories }: VotingFormProps) {
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
                 <RadioGroup
-                  name={category.id} // Name attribute is essential for FormData
+                  name={category.id} 
                   className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
                 >
                   {category.nominees.map((nominee) => (
                     <Label
                       key={nominee.id}
-                      htmlFor={`${category.id}-${nominee.id}`} // Ensure unique IDs for labels
+                      htmlFor={`${category.id}-${nominee.id}`} 
                       className="group relative block cursor-pointer rounded-lg border bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:ring-2 has-[[data-state=checked]]:ring-primary"
                     >
                       <div className="h-full transform transition-transform duration-200 ease-in-out hover:scale-[1.02]">
