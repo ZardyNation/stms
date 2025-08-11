@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useActionState } from 'react';
@@ -23,23 +22,23 @@ interface VotingFormProps {
 const createVoteSchema = (categories: Category[]) => {
   const schemaObject = categories.reduce((acc, category) => {
     if (!category.tbd) {
-      acc[category.id] = z.string().optional();
+      acc[category.id] = z.string({ required_error: "Please select a nominee." });
     }
     return acc;
-  }, {} as Record<string, z.ZodOptional<z.ZodString>>);
+  }, {} as Record<string, z.ZodString>);
   schemaObject.email = z.string().email({ message: 'A valid email is required to vote.' });
   return z.object(schemaObject);
 };
 
 const SubmitButton = ({ pending }: { pending: boolean }) => (
-  <Button type="submit" size="lg" className="w-full md:w-auto" disabled={pending}>
+  <Button type="submit" size="lg" className="w-full" disabled={pending}>
     {pending ? (
       <>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         Submitting...
       </>
     ) : (
-      'Submit Vote'
+      'Submit Your Votes'
     )}
   </Button>
 );
@@ -75,75 +74,80 @@ export default function VotingForm({ categories }: VotingFormProps) {
       });
     }
   }, [state, toast, form]);
+  
+  const { formState: { errors } } = form;
 
   return (
     <form action={formAction} className="space-y-12">
-      {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category) => (
-        <Card key={category.id} className="overflow-hidden">
-          <CardHeader className="bg-secondary">
-            <CardTitle className="font-headline text-2xl">{category.title}</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 md:p-6">
-            <RadioGroup
-              name={category.id}
-              onValueChange={(value) => form.setValue(category.id, value)}
-              className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-            >
-              {category.nominees.map((nominee) => (
-                <Label
-                  key={nominee.id}
-                  htmlFor={nominee.id}
-                  className="group block cursor-pointer rounded-lg border-2 border-transparent bg-card shadow-sm transition-all has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:ring-2 has-[[data-state=checked]]:ring-primary"
-                >
-                  <Card className="h-full transform transition-transform hover:scale-105">
-                    <CardContent className="relative flex flex-col items-center p-4 text-center">
-                      <RadioGroupItem value={nominee.id} id={nominee.id} className="absolute right-4 top-4 h-6 w-6" />
-                      <Image
-                        src={nominee.photo}
-                        alt={`Photo of ${nominee.name}`}
-                        width={128}
-                        height={128}
-                        className="mb-4 h-32 w-32 rounded-full object-cover"
-                        data-ai-hint={nominee.aiHint}
-                      />
-                      <p className="font-body text-lg font-semibold">{nominee.name}</p>
-                      <p className="text-sm text-muted-foreground">{nominee.organization}</p>
-                    </CardContent>
-                  </Card>
-                </Label>
-              ))}
-            </RadioGroup>
-          </CardContent>
-        </Card>
-      ))}
+      <div className="space-y-8">
+        {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category, index) => (
+          <Card key={category.id} className="border-border/60 bg-card/50">
+            <CardHeader>
+              <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
+               {errors[category.id] && (
+                <p className="text-sm text-destructive">{errors[category.id]?.message}</p>
+              )}
+            </CardHeader>
+            <CardContent>
+              <RadioGroup
+                name={category.id}
+                onValueChange={(value) => form.setValue(category.id, value, { shouldValidate: true })}
+                className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {category.nominees.map((nominee) => (
+                  <Label
+                    key={nominee.id}
+                    htmlFor={nominee.id}
+                    className="group relative block cursor-pointer rounded-xl border-2 border-transparent bg-card shadow-sm ring-offset-background transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[[data-state=checked]]:border-primary"
+                  >
+                    <div className="h-full transform transition-transform duration-200 ease-in-out hover:scale-[1.02]">
+                      <RadioGroupItem value={nominee.id} id={nominee.id} className="absolute right-3 top-3 h-5 w-5" />
+                      <div className="relative flex flex-col items-center p-4 text-center">
+                        <Image
+                          src={nominee.photo}
+                          alt={`Photo of ${nominee.name}`}
+                          width={100}
+                          height={100}
+                          className="mb-4 h-28 w-28 rounded-full object-cover ring-1 ring-border"
+                          data-ai-hint={nominee.aiHint}
+                        />
+                        <p className="font-semibold text-base">{nominee.name}</p>
+                        <p className="text-xs text-muted-foreground">{nominee.organization}</p>
+                      </div>
+                    </div>
+                  </Label>
+                ))}
+              </RadioGroup>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-      <Card>
+      <Card className="sticky bottom-0 border-border/60 bg-background/95 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Confirm Your Vote</CardTitle>
+          <CardTitle className="font-bold tracking-tight">Confirm Your Vote</CardTitle>
           <CardDescription>
-            Please provide your email to finalize your submission.
+            Provide your email address to finalize your submission. This is required to prevent duplicate votes.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="email" className="font-body text-lg font-medium">Email Address</Label>
+          <div className="space-y-2">
+            <Label htmlFor="email" className="font-medium">Email Address</Label>
             <Input
               id="email"
               type="email"
               placeholder="you@example.com"
-              className="mt-2 text-base"
+              className="text-base"
               {...form.register('email')}
             />
-            {form.formState.errors.email && (
-              <p className="mt-2 text-sm text-destructive">{form.formState.errors.email.message}</p>
+            {errors.email && (
+              <p className="text-sm text-destructive">{errors.email.message}</p>
             )}
              {state.status === 'error' && state.message.toLowerCase().includes('email') && (
-              <p className="mt-2 text-sm text-destructive">{state.message}</p>
+              <p className="text-sm text-destructive">{state.message}</p>
             )}
           </div>
-          <div className="flex justify-end pt-4">
-            <SubmitButton pending={isSubmitting} />
-          </div>
+          <SubmitButton pending={isSubmitting} />
         </CardContent>
       </Card>
     </form>

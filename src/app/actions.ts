@@ -6,10 +6,10 @@ import { VOTE_CATEGORIES } from './data';
 const createVoteSchema = () => {
   const schemaObject = VOTE_CATEGORIES.reduce((acc, category) => {
     if (!category.tbd) {
-      acc[category.id] = z.string().optional();
+      acc[category.id] = z.string({ required_error: `Please select a nominee for ${category.title}.` });
     }
     return acc;
-  }, {} as Record<string, z.ZodOptional<z.ZodString>>);
+  }, {} as Record<string, z.ZodString>);
 
   schemaObject.email = z.string().email({ message: 'A valid email is required to vote.' });
 
@@ -30,8 +30,11 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
   if (!parsed.success) {
     console.error('Validation Error:', parsed.error.flatten().fieldErrors);
+    
+    const firstError = Object.values(parsed.error.flatten().fieldErrors)[0]?.[0];
+
     return {
-      message: parsed.error.flatten().fieldErrors.email?.[0] || 'There was an error with your submission.',
+      message: firstError || 'There was an error with your submission.',
       status: 'error',
     };
   }
