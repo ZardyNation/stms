@@ -18,7 +18,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
+  // Allow access to login and signup pages for non-authenticated users.
   if (!user && url.pathname !== '/login' && url.pathname !== '/signup') {
+    // Exclude static assets and API routes from redirection
+    if (url.pathname.startsWith('/_next/') || url.pathname.startsWith('/api/')) {
+      return response;
+    }
     return NextResponse.redirect(new URL('/login', request.url))
   }
   

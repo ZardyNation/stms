@@ -5,7 +5,13 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { AuthButton } from './auth/AuthButton';
 import Link from 'next/link';
-import { User } from 'lucide-react';
+import { User, Shield } from 'lucide-react';
+
+async function isAdmin() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  return user?.email === process.env.ADMIN_EMAIL;
+}
 
 async function Header() {
   const supabase = createClient();
@@ -17,6 +23,8 @@ async function Header() {
   if (!user) {
     return redirect('/login');
   }
+
+  const showAdminLink = await isAdmin();
 
   return (
     <header className="bg-card border-b py-4">
@@ -36,6 +44,14 @@ async function Header() {
                 Profile
               </Link>
             </Button>
+            {showAdminLink && (
+              <Button variant="ghost" asChild>
+                <Link href="/admin">
+                  <Shield className="mr-2 h-4 w-4" />
+                  Admin
+                </Link>
+              </Button>
+            )}
           <AuthButton />
         </div>
       </div>
