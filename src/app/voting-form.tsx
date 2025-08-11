@@ -1,9 +1,9 @@
+
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useActionState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { useFormState } from 'react-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
@@ -48,7 +48,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
   const voteSchema = createVoteSchema(categories);
   const { toast } = useToast();
 
-  const [state, formAction] = useFormState<FormState, FormData>(submitVote, {
+  const [state, formAction, isSubmitting] = useActionState<FormState, FormData>(submitVote, {
     message: '',
     status: 'idle',
   });
@@ -75,8 +75,6 @@ export default function VotingForm({ categories }: VotingFormProps) {
       });
     }
   }, [state, toast, form]);
-
-  const { formState: { isSubmitting } } = form;
 
   return (
     <form action={formAction} className="space-y-12">
