@@ -1,3 +1,4 @@
+
 'use server';
 
 import { z } from 'zod';
@@ -9,17 +10,18 @@ import { redirect } from 'next/navigation';
 const createVoteSchema = () => {
   const schemaObject = VOTE_CATEGORIES.reduce((acc, category) => {
     if (!category.tbd) {
-      acc[category.id] = z.string({ required_error: `Please make a selection for ${category.title}.` });
+      // Make each category vote optional
+      acc[category.id] = z.string().optional();
     }
     return acc;
-  }, {} as Record<string, z.ZodString>);
+  }, {} as Record<string, z.ZodString | z.ZodOptional<z.ZodString>>);
 
   return z.object(schemaObject);
 };
 
 export type FormState = {
   message: string;
-  status: 'idle' | 'error';
+  status: 'idle' | 'error' | 'success';
 };
 
 export async function submitVote(prevState: FormState, formData: FormData): Promise<FormState> {
@@ -36,12 +38,27 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
   }
 
   const rawFormData = Object.fromEntries(formData.entries());
-  const parsed = voteSchema.safeParse(rawFormData);
+  
+  // Filter out any empty values so we only process the categories the user voted for.
+  const filteredFormData = Object.entries(rawFormData).reduce((acc, [key, value]) => {
+    if (value) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {} as Record<string, any>);
+
+  if (Object.keys(filteredFormData).length === 0) {
+    return {
+      message: 'Please select at least one nominee to vote.',
+      status: 'error',
+    };
+  }
+
+  const parsed = voteSchema.safeParse(filteredFormData);
 
   if (!parsed.success) {
-    const firstError = Object.values(parsed.error.flatten().fieldErrors)[0]?.[0];
     return {
-      message: firstError || 'Please ensure you have voted in all categories.',
+      message: 'There was an error with your submission. Please try again.',
       status: 'error',
     };
   }
