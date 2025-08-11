@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import { VOTE_CATEGORIES } from './data';
+import { supabase } from '@/lib/supabase';
 
 const createVoteSchema = () => {
   const schemaObject = VOTE_CATEGORIES.reduce((acc, category) => {
@@ -29,8 +30,6 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
   const parsed = voteSchema.safeParse(rawFormData);
 
   if (!parsed.success) {
-    console.error('Validation Error:', parsed.error.flatten().fieldErrors);
-    
     const firstError = Object.values(parsed.error.flatten().fieldErrors)[0]?.[0];
 
     return {
@@ -41,15 +40,41 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
   
   const data = parsed.data;
 
-  // In a real application, you would save the vote to a database here.
-  // We'll simulate that process.
-  console.log('Vote Submitted:', data);
+  try {
+    // Check if the email has already voted
+    const { data: existingVote, error: selectError } = await supabase
+      .from('votes')
+      .select('email')
+      .eq('email', data.email)
+      .single();
 
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  return {
-    message: 'Thank you for voting! Your submission has been received.',
-    status: 'success',
-  };
+    if (selectError && selectError.code !== 'PGRST116') { // PGRST116: "No rows found"
+      throw selectError;
+    }
+
+    if (existingVote) {
+      return {
+        message: 'This email address has already been used to vote.',
+        status: 'error',
+      };
+    }
+    
+    // Save the vote to the database
+    const { error: insertError } = await supabase.from('votes').insert([data]);
+
+    if (insertError) {
+      throw insertError;
+    }
+
+    return {
+      message: 'Thank you for voting! Your submission has been received.',
+      status: 'success',
+    };
+  } catch (error: any) {
+    console.error('Supabase Error:', error);
+    return {
+      message: 'A server error occurred. Please try again later.',
+      status: 'error',
+    };
+  }
 }
