@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/types';
 import { submitVote, type FormState } from './actions';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
@@ -31,7 +31,7 @@ const createVoteSchema = (categories: Category[]) => {
 };
 
 const SubmitButton = ({ pending }: { pending: boolean }) => (
-  <Button type="submit" size="lg" className="w-full" disabled={pending}>
+  <Button type="submit" size="lg" className="w-full mt-6" disabled={pending}>
     {pending ? (
       <>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -78,17 +78,17 @@ export default function VotingForm({ categories }: VotingFormProps) {
   const { formState: { errors } } = form;
 
   return (
-    <form action={formAction} className="space-y-12">
+    <form action={formAction} className="space-y-12 max-w-4xl mx-auto">
       <div className="space-y-8">
         {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category, index) => (
-          <Card key={category.id} className="border-border/60 bg-card/50">
-            <CardHeader>
+          <Card key={category.id} className="overflow-hidden">
+            <CardHeader className="bg-muted/50">
               <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
                {errors[category.id] && (
-                <p className="text-sm text-destructive">{errors[category.id]?.message}</p>
+                <p className="text-sm text-destructive pt-1">{errors[category.id]?.message}</p>
               )}
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6">
               <RadioGroup
                 name={category.id}
                 onValueChange={(value) => form.setValue(category.id, value, { shouldValidate: true })}
@@ -98,7 +98,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
                   <Label
                     key={nominee.id}
                     htmlFor={nominee.id}
-                    className="group relative block cursor-pointer rounded-xl border-2 border-transparent bg-card shadow-sm ring-offset-background transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[[data-state=checked]]:border-primary"
+                    className="group relative block cursor-pointer rounded-lg border bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:ring-2 has-[[data-state=checked]]:ring-primary"
                   >
                     <div className="h-full transform transition-transform duration-200 ease-in-out hover:scale-[1.02]">
                       <RadioGroupItem value={nominee.id} id={nominee.id} className="absolute right-3 top-3 h-5 w-5" />
@@ -106,13 +106,13 @@ export default function VotingForm({ categories }: VotingFormProps) {
                         <Image
                           src={nominee.photo}
                           alt={`Photo of ${nominee.name}`}
-                          width={100}
-                          height={100}
-                          className="mb-4 h-28 w-28 rounded-full object-cover ring-1 ring-border"
+                          width={128}
+                          height={128}
+                          className="mb-4 h-32 w-32 rounded-full object-cover ring-1 ring-border"
                           data-ai-hint={nominee.aiHint}
                         />
-                        <p className="font-semibold text-base">{nominee.name}</p>
-                        <p className="text-xs text-muted-foreground">{nominee.organization}</p>
+                        <p className="font-semibold text-lg">{nominee.name}</p>
+                        <p className="text-sm text-muted-foreground">{nominee.organization}</p>
                       </div>
                     </div>
                   </Label>
@@ -123,33 +123,33 @@ export default function VotingForm({ categories }: VotingFormProps) {
         ))}
       </div>
 
-      <Card className="sticky bottom-0 border-border/60 bg-background/95 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="font-bold tracking-tight">Confirm Your Vote</CardTitle>
-          <CardDescription>
-            Provide your email address to finalize your submission. This is required to prevent duplicate votes.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="font-medium">Email Address</Label>
+      <div className="p-6 border rounded-lg bg-card">
+        <div className="max-w-md mx-auto">
+          <div className="text-center">
+            <h3 className="text-xl font-bold tracking-tight">Confirm Your Vote</h3>
+            <p className="text-muted-foreground mt-1">
+              Provide your email address to finalize your submission.
+            </p>
+          </div>
+          <div className="space-y-2 mt-6">
+            <Label htmlFor="email" className="font-medium sr-only">Email Address</Label>
             <Input
               id="email"
               type="email"
               placeholder="you@example.com"
-              className="text-base"
+              className="text-base h-12 text-center"
               {...form.register('email')}
             />
             {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
+              <p className="text-sm text-destructive text-center pt-1">{errors.email.message}</p>
             )}
              {state.status === 'error' && state.message.toLowerCase().includes('email') && (
-              <p className="text-sm text-destructive">{state.message}</p>
+              <p className="text-sm text-destructive text-center pt-1">{state.message}</p>
             )}
           </div>
           <SubmitButton pending={isSubmitting} />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </form>
   );
 }
