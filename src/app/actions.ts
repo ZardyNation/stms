@@ -109,16 +109,17 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
       };
     }
 
-    const voteData: Record<string, any> = {
-      email: parsed.data.email,
-    };
-
-    // Only add category IDs that have a selection
-    for (const key in parsed.data) {
+    const selections: Record<string, string> = {};
+     for (const key in parsed.data) {
         if (key !== 'email' && parsed.data[key as keyof typeof parsed.data]) {
-            voteData[key] = parsed.data[key as keyof typeof parsed.data];
+            selections[key] = parsed.data[key as keyof typeof parsed.data] as string;
         }
     }
+
+    const voteData = {
+      email: parsed.data.email,
+      selections: selections
+    };
     
     const { error: insertError } = await supabase.from('votes').insert(voteData);
 
@@ -139,3 +140,4 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
   redirect('/thanks');
 }
+

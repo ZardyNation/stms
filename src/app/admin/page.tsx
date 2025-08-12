@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -28,8 +29,7 @@ async function getVoteCounts(categories: Category[]) {
   const supabase = createClient();
   if (!supabase) return null;
 
-  // Select all columns except metadata fields
-  const { data: votes, error } = await supabase.from('votes').select('*');
+  const { data: votes, error } = await supabase.from('votes').select('selections');
 
   if (error) {
     console.error('Error fetching votes:', error);
@@ -50,17 +50,15 @@ async function getVoteCounts(categories: Category[]) {
   if(votes) {
       totalVotes = votes.length;
       votes.forEach(vote => {
-        Object.keys(vote).forEach(categoryId => {
-          if (categoryId in voteCounts) {
-            const nomineeId = vote[categoryId as keyof typeof vote];
-            if (nomineeId && nomineeId in voteCounts[categoryId]) {
-              voteCounts[categoryId][nomineeId]++;
-            }
-          }
-        });
+        if(vote.selections) {
+            Object.entries(vote.selections).forEach(([categoryId, nomineeId]) => {
+                if (categoryId in voteCounts && nomineeId && nomineeId in voteCounts[categoryId]) {
+                    voteCounts[categoryId][nomineeId as string]++;
+                }
+            });
+        }
       });
   }
-
 
   return {counts: voteCounts, total: totalVotes};
 }
