@@ -48,12 +48,14 @@ export default async function Home() {
         </div>
         <div className="w-full text-center mb-8 p-6 flex flex-col items-center">
             <Logo />
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter mt-4">
-                <span className="bg-primary text-primary-foreground px-2 rounded-md font-bold">IA</span> <span className="font-bold">Awards</span>
-            </h1>
-            <p className="text-foreground mt-3 max-w-2xl mx-auto">
-                Welcome to the Impact Awards, celebrating outstanding achievements. Cast your vote for the nominees who have made a significant impact.
-            </p>
+            <div className="mt-4 text-foreground">
+                <p className="text-xl sm:text-2xl font-light tracking-tight">Stop The Maddness Presents</p>
+                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter my-2">
+                    <span className="bg-primary text-primary-foreground px-2 rounded-md font-bold">IA</span> <span className="font-bold">Awards</span>
+                </h1>
+                <p className="text-xl sm:text-2xl font-light tracking-tight">Hosted by</p>
+                <p className="text-2xl sm:text-3xl font-semibold mt-1">Tamika "GeorgiaMe" Harper</p>
+            </div>
         </div>
 
         <div className="w-full text-center mb-12 p-6">
