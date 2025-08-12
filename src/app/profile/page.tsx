@@ -66,7 +66,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-       <header className="bg-card/80 backdrop-blur-sm border-b py-4 sticky top-0 z-50">
+       <header className="bg-card/80 backdrop-blur-sm border-b py-2 sticky top-0 z-50">
             <div className="container mx-auto flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl">
@@ -85,7 +85,7 @@ export default async function ProfilePage() {
                 </div>
             </div>
         </header>
-        <main className="flex-1 bg-black/20 py-8 sm:py-12">
+        <main className="flex-1 bg-black/20 py-6 sm:py-8">
             <div className="container mx-auto">
                 <Card>
                     <CardHeader>

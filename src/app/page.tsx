@@ -39,7 +39,7 @@ async function Header() {
   if (!supabase) {
     // This path should ideally not be reached if Supabase is configured
     return (
-      <header className="bg-card/80 backdrop-blur-sm border-b py-4 sticky top-0 z-50">
+      <header className="bg-card/80 backdrop-blur-sm border-b py-2 sticky top-0 z-50">
         <div className="container mx-auto flex items-center justify-between">
             <Logo />
             <p className="text-sm text-destructive">Supabase not configured.</p>
@@ -55,7 +55,7 @@ async function Header() {
   const showAdminLink = user && await isAdmin();
 
   return (
-    <header className="bg-card/80 backdrop-blur-sm border-b py-4 sticky top-0 z-50">
+    <header className="bg-card/80 backdrop-blur-sm border-b py-2 sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
         <Logo />
         <div className="flex items-center gap-2">
@@ -90,8 +90,8 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="container mx-auto py-8 sm:py-12">
-        <div className="text-center mb-12 rounded-xl bg-card/80 backdrop-blur-sm p-8">
+      <main className="container mx-auto py-6 sm:py-8">
+        <div className="text-center mb-8 rounded-xl bg-card/80 backdrop-blur-sm p-6">
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
                 <span className="bg-primary text-primary-foreground px-2 rounded-md font-bold">IA</span> <span className="font-bold">Awards</span>
             </h1>
@@ -101,7 +101,7 @@ export default async function Home() {
         </div>
         <VotingForm categories={categories} />
       </main>
-      <footer className="container mx-auto py-6 text-center text-background bg-foreground/80 rounded-t-lg text-sm">
+      <footer className="container mx-auto py-4 text-center text-background bg-foreground/80 rounded-t-lg text-sm">
         <p>Please note: One vote per category per user. All duplicate entries will be invalidated.</p>
       </footer>
     </div>
