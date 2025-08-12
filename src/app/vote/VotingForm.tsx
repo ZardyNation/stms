@@ -7,18 +7,19 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/types';
-import { submitVote, type FormState, loginAsGuest } from '../actions';
+import { submitVote, type FormState } from '../actions';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
-import { Check, Loader2, Home, Ticket, User, Info, Trophy, Calendar } from 'lucide-react';
+import { Check, Loader2, Ticket, Trophy } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
@@ -48,17 +49,17 @@ const initialState: FormState = {
 export default function VotingForm({ categories }: VotingFormProps) {
   const { toast } = useToast();
   const [state, formAction] = useActionState<FormState, FormData>(submitVote, initialState);
-  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
-  const [isGuestTransitioning, startGuestTransition] = useTransition();
+  const [isEmailModalOpen, setEmailModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [guestEmail, setGuestEmail] = useState('');
+  const [formData, setFormData] = useState<FormData | null>(null);
   
   const form = useForm();
   
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const hasSelections = categories.some(category => formData.get(category.id));
+    const currentFormData = new FormData(event.currentTarget);
+    const hasSelections = categories.some(category => currentFormData.get(category.id));
 
     if (!hasSelections) {
        toast({
@@ -69,71 +70,33 @@ export default function VotingForm({ categories }: VotingFormProps) {
       return;
     }
     
-    startTransition(() => {
-      formAction(formData);
-    });
+    setFormData(currentFormData);
+    setEmailModalOpen(true);
   };
   
-  const handleGuestLogin = async () => {
-    startGuestTransition(async () => {
-      const result = await loginAsGuest(guestEmail);
-      if (result.success) {
-        setAuthModalOpen(false);
-        toast({
-          title: "You're in!",
-          description: "You can now cast your vote.",
-        });
-        const formData = new FormData(document.querySelector('form')!);
-        startTransition(() => {
-          formAction(formData);
-        });
-
-      } else {
-        toast({
-          title: "Authentication Error",
-          description: result.message,
-          variant: "destructive",
-        });
-      }
-    });
+  const handleEmailSubmit = () => {
+    if (formData) {
+      formData.set('email', guestEmail);
+      startTransition(() => {
+        formAction(formData);
+      });
+      setEmailModalOpen(false);
+    }
   };
 
   useEffect(() => {
     if (state?.status === 'error' && state.message) {
-      if(state.message.includes("log in")) {
-         const formElement = document.querySelector('form');
-         if(formElement) {
-            const formData = new FormData(formElement);
-            const hasSelections = categories.some(category => formData.get(category.id));
-            if(hasSelections) {
-                 setAuthModalOpen(true);
-            } else {
-                toast({
-                    title: 'No Selection Made',
-                    description: 'You must select at least one nominee to submit your vote.',
-                    variant: 'destructive',
-                });
-            }
-         }
-      } else {
-        toast({
-            title: 'Error Submitting Vote',
-            description: state.message,
-            variant: 'destructive',
-        });
-      }
+      toast({
+          title: 'Error Submitting Vote',
+          description: state.message,
+          variant: 'destructive',
+      });
+    } else if (state?.status === 'email_required') {
+        setEmailModalOpen(true);
     }
-  }, [state, toast, categories]);
-
-  useEffect(() => {
-    const hasSeenWelcome = sessionStorage.getItem('hasSeenWelcome');
-    if (!hasSeenWelcome) {
-        setAuthModalOpen(true);
-        sessionStorage.setItem('hasSeenWelcome', 'true');
-    }
-  }, []);
+  }, [state, toast]);
   
-  const isSubmitting = isPending || isGuestTransitioning;
+  const isSubmitting = isPending;
 
   return (
     <>
@@ -213,17 +176,17 @@ export default function VotingForm({ categories }: VotingFormProps) {
         </section>
       </form>
 
-       <Dialog open={isAuthModalOpen} onOpenChange={setAuthModalOpen}>
+       <Dialog open={isEmailModalOpen} onOpenChange={setEmailModalOpen}>
         <DialogContent className="bg-accent text-accent-foreground">
           <DialogHeader>
-            <DialogTitle>Welcome to the IA Awards!</DialogTitle>
+            <DialogTitle>One Last Step</DialogTitle>
             <DialogDescription>
-             Powered By My Event Advisor. Please provide your email to vote. We need your email to ensure every vote is unique.
+             Please provide your email to submit your vote. We use your email to ensure every vote is unique.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="guest-email">Email Address</Label>
+              <Label htmlFor="guest-email" className="text-accent-foreground/80">Email Address</Label>
               <Input
                 id="guest-email"
                 type="email"
@@ -233,9 +196,12 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 className="bg-accent-foreground/10 text-accent-foreground placeholder:text-accent-foreground/50"
               />
             </div>
-            <Button onClick={handleGuestLogin} disabled={isGuestTransitioning || !guestEmail} className="w-full bg-accent-foreground text-accent hover:bg-accent-foreground/90">
-              {isGuestTransitioning ? <Loader2 className="animate-spin" /> : "Continue"}
-            </Button>
+             <DialogFooter>
+                <Button onClick={() => setEmailModalOpen(false)} variant="ghost">Cancel</Button>
+                <Button onClick={handleEmailSubmit} disabled={isPending || !guestEmail} className="bg-accent-foreground text-accent hover:bg-accent-foreground/90">
+                {isPending ? <Loader2 className="animate-spin" /> : "Submit Vote"}
+                </Button>
+            </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>

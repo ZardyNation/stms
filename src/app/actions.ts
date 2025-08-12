@@ -33,12 +33,15 @@ const createVoteSchema = async () => {
     return acc;
   }, {} as Record<string, z.ZodString | z.ZodOptional<z.ZodString>>);
 
+  // Add email to the schema
+  schemaObject.email = z.string().email("Please enter a valid email address.");
+
   return z.object(schemaObject);
 };
 
 export type FormState = {
   message: string;
-  status: 'idle' | 'error' | 'success';
+  status: 'idle' | 'error' | 'success' | 'email_required';
 };
 
 export async function submitVote(prevState: FormState, formData: FormData): Promise<FormState> {
@@ -51,20 +54,17 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
       status: 'error',
     }
   }
-
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return {
-      message: 'Authentication error. Please log in to vote.',
-      status: 'error',
-    };
+  
+  const email = formData.get('email') as string;
+  
+  if (!email) {
+    return { message: "Email is required to vote.", status: "email_required" };
   }
 
   const rawFormData = Object.fromEntries(formData.entries());
   
   const filteredFormData = Object.entries(rawFormData).reduce((acc, [key, value]) => {
-    if (value) {
+    if (value && key !== 'email') { // Exclude email from nominee selections
       acc[key] = value;
     }
     return acc;
@@ -76,10 +76,14 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
       status: 'error',
     };
   }
-
-  const parsed = voteSchema.safeParse(filteredFormData);
-
+  
+  const parsed = voteSchema.safeParse(rawFormData);
+  
   if (!parsed.success) {
+      const emailError = parsed.error.flatten().fieldErrors.email?.[0];
+      if (emailError) {
+          return { message: emailError, status: 'error' };
+      }
     return {
       message: 'There was an error with your submission. Please try again.',
       status: 'error',
@@ -89,8 +93,8 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
   try {
     const { data: existingVote, error: checkError } = await supabase
       .from('votes')
-      .select('user_id')
-      .eq('user_id', user.id)
+      .select('email')
+      .eq('email', parsed.data.email)
       .maybeSingle();
 
     if (checkError) {
@@ -100,15 +104,21 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
     if (existingVote) {
       return {
-        message: 'You have already submitted your vote.',
+        message: 'This email address has already been used to vote.',
         status: 'error',
       };
     }
 
-    const voteData = {
-      ...parsed.data,
-      user_id: user.id,
+    const voteData: Record<string, any> = {
+      email: parsed.data.email,
     };
+
+    // Only add category IDs that have a selection
+    for (const key in parsed.data) {
+        if (key !== 'email' && parsed.data[key as keyof typeof parsed.data]) {
+            voteData[key] = parsed.data[key as keyof typeof parsed.data];
+        }
+    }
     
     const { error: insertError } = await supabase.from('votes').insert(voteData);
 
@@ -118,7 +128,6 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
     }
 
     revalidatePath('/');
-    revalidatePath('/profile');
     
   } catch (error: any) {
     console.error('Unhandled error during vote submission:', error);
@@ -129,41 +138,4 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
   }
 
   redirect('/thanks');
-}
-
-
-export async function loginAsGuest(email: string): Promise<{ success: boolean; message: string }> {
-  const supabase = createClient();
-  if (!supabase) {
-    return { success: false, message: 'Database connection failed.' };
-  }
-
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: true,
-    }
-  });
-
-  if (error) {
-    console.error('Guest sign-in error:', error);
-    return { success: false, message: 'Could not authenticate your email. Please try again.' };
-  }
-  
-  // This simulates the magic link click for the prototype.
-  // In a real app, the user would click a link in their email.
-  const { data: { user } } = await supabase.auth.setSession({
-      access_token: 'dummy-access-token', // This is not a real token
-      refresh_token: 'dummy-refresh-token'
-  });
-
-  // Re-fetch user to confirm session
-  const { data: { user: finalUser } } = await supabase.auth.getUser();
-  if(!finalUser) {
-    // This part is tricky. In a real flow, we'd wait for the email click.
-    // For the prototype, we assume the OTP flow works and just need to revalidate.
-  }
-
-  revalidatePath('/', 'layout');
-  return { success: true, message: 'Success' };
 }

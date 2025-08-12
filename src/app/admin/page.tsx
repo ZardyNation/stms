@@ -2,8 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { AuthButton } from '../auth/AuthButton';
-import { Home, User, Pencil } from 'lucide-react';
+import { Home, Pencil } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Category, Nominee } from '@/types';
@@ -29,6 +28,7 @@ async function getVoteCounts(categories: Category[]) {
   const supabase = createClient();
   if (!supabase) return null;
 
+  // Select all columns except metadata fields
   const { data: votes, error } = await supabase.from('votes').select('*');
 
   if (error) {
@@ -37,7 +37,7 @@ async function getVoteCounts(categories: Category[]) {
   }
 
   const voteCounts: Record<string, Record<string, number>> = {};
-  let totalVotes = 0;
+  
   categories.forEach(category => {
     if (category.tbd) return;
     voteCounts[category.id] = {};
@@ -46,14 +46,15 @@ async function getVoteCounts(categories: Category[]) {
     });
   });
 
+  let totalVotes = 0;
   if(votes) {
+      totalVotes = votes.length;
       votes.forEach(vote => {
         Object.keys(vote).forEach(categoryId => {
           if (categoryId in voteCounts) {
-            const nomineeId = vote[categoryId];
+            const nomineeId = vote[categoryId as keyof typeof vote];
             if (nomineeId && nomineeId in voteCounts[categoryId]) {
               voteCounts[categoryId][nomineeId]++;
-              totalVotes++;
             }
           }
         });
@@ -64,32 +65,8 @@ async function getVoteCounts(categories: Category[]) {
   return {counts: voteCounts, total: totalVotes};
 }
 
-async function isAdmin() {
-  const supabase = createClient();
-   if (!supabase) {
-    return false;
-  }
-  const { data: { user } } = await supabase.auth.getUser();
-  return user?.email === process.env.ADMIN_EMAIL;
-}
 
 export default async function AdminPage() {
-    const supabase = createClient();
-    if (!supabase) {
-        return redirect('/login?message=Supabase is not configured. Please check your environment variables.');
-    }
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        return redirect('/login');
-    }
-
-    const isAdminUser = await isAdmin();
-
-    if (!isAdminUser) {
-        return redirect('/');
-    }
-
     const categories = await getCategories();
     const voteData = await getVoteCounts(categories);
 
@@ -112,18 +89,11 @@ export default async function AdminPage() {
                             </Link>
                         </Button>
                          <Button variant="ghost" asChild>
-                            <Link href="/profile">
-                                <User className="mr-2 h-4 w-4" />
-                                Profile
-                            </Link>
-                        </Button>
-                         <Button variant="ghost" asChild>
                             <Link href="/vote">
                                 <Pencil className="mr-2 h-4 w-4" />
                                 Vote
                             </Link>
                         </Button>
-                        <AuthButton />
                     </div>
                 </div>
                 
@@ -134,7 +104,7 @@ export default async function AdminPage() {
                     <CardHeader>
                         <CardTitle>Live Vote Counts</CardTitle>
                         <CardDescription>
-                           This is the current tally for each nominee.
+                           This is the current tally for each nominee. Total votes cast: {voteData?.total ?? 0}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">

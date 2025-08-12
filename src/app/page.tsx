@@ -1,53 +1,25 @@
 
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
-import { AuthButton } from './auth/AuthButton';
 import Link from 'next/link';
-import { User, Shield, Award, Mic, Ticket, Flower, Pin, Users, Calendar, Trophy, Star, Check } from 'lucide-react';
+import { Shield, Award, Mic, Ticket, Flower, Pin, Users, Calendar, Trophy, Star, Check } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FeaturedNominees from './FeaturedNominees';
 
-async function isAdmin() {
-  const supabase = createClient();
-  if (!supabase) {
-    return false;
-  }
-  const { data: { user } } = await supabase.auth.getUser();
-  return user?.email === process.env.ADMIN_EMAIL;
-}
 
 export default async function Home() {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const showAdminLink = user && await isAdmin();
 
   return (
     <div className="min-h-screen">
       <main className="container mx-auto py-6 sm:py-8">
         <div className="absolute top-4 right-4 z-50 flex items-center gap-2">
-           {user && (
-               <>
-                <Button variant="ghost" asChild>
-                    <Link href="/profile">
-                        <User className="mr-2 h-4 w-4" />
-                        Profile
-                    </Link>
-                </Button>
-                {showAdminLink && (
-                  <Button variant="ghost" asChild>
-                    <Link href="/admin">
-                      <Shield className="mr-2 h-4 w-4" />
-                      Admin
-                    </Link>
-                  </Button>
-                )}
-                <AuthButton />
-               </>
-            )}
+            <Button variant="ghost" asChild>
+                <Link href="/admin">
+                    <Shield className="mr-2 h-4 w-4" />
+                    Admin
+                </Link>
+            </Button>
         </div>
         
         <section className="w-full text-center pt-12 pb-16 flex flex-col items-center">
@@ -57,7 +29,7 @@ export default async function Home() {
                    🌟 The Impact Awards 2025
                 </h1>
                  <p className="text-2xl sm:text-3xl font-semibold mt-1">A Night to Honor, Inspire, and Celebrate</p>
-                <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
+                <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">
                     Join us on Saturday, October 12, 2025, for the Grand Finale of Stop the Madness Week — an unforgettable evening featuring The Impact Awards Ceremony, a runway-stopping fashion show, live performances, and a dazzling Gold Carpet experience.
                 </p>
             </div>
@@ -194,5 +166,3 @@ export default async function Home() {
     </div>
   );
 }
-
-    
