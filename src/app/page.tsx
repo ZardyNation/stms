@@ -49,7 +49,7 @@ export default async function Home() {
         <section className="my-16 text-center" id="about">
             <Flower className="h-12 w-12 mx-auto text-primary" />
             <h2 className="text-3xl font-bold tracking-tight mt-4">✨ Because Change-Makers Deserve Their Flowers While They’re Here</h2>
-            <div className="mt-4 text-lg text-muted-foreground max-w-4xl mx-auto space-y-4">
+            <div className="mt-4 text-lg text-foreground max-w-4xl mx-auto space-y-4">
                 <p>
                     The Impact Awards were created to celebrate the people, organizations, and visionaries who are making a real difference in our communities. This isn’t just an award show — it’s a movement of recognition, validation, and visibility.
                 </p>
