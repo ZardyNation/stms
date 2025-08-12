@@ -1,9 +1,9 @@
 
-
 'use client';
 
 import { useEffect, useActionState, useState, useTransition } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/types';
@@ -69,17 +69,9 @@ export default function VotingForm({ categories }: VotingFormProps) {
       return;
     }
     
-    // Check if user is logged in, if not show modal
-    // We can check this by seeing if the actions.ts file would have a user
-    // A better way would be to get the user session on the client
-    // For now, we will simulate this by checking for an error status that implies no user
-     if(state.status === 'error' && state.message.includes('log in')) {
-        setAuthModalOpen(true);
-     } else {
-        startTransition(() => {
-          formAction(formData);
-        });
-     }
+    startTransition(() => {
+      formAction(formData);
+    });
   };
   
   const handleGuestLogin = async () => {
@@ -91,14 +83,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
           title: "You're in!",
           description: "You can now cast your vote.",
         });
-        // Resubmit the form
-        const formData = new FormData();
-        const values = getValues();
-        Object.keys(values).forEach(key => {
-            if(values[key]) {
-                 formData.append(key, values[key]);
-            }
-        });
+        const formData = new FormData(document.querySelector('form')!);
         startTransition(() => {
           formAction(formData);
         });
@@ -116,7 +101,6 @@ export default function VotingForm({ categories }: VotingFormProps) {
   useEffect(() => {
     if (state?.status === 'error' && state.message) {
       if(state.message.includes("log in")) {
-        // Only open modal if there's selections
          const formElement = document.querySelector('form');
          if(formElement) {
             const formData = new FormData(formElement);
@@ -140,6 +124,15 @@ export default function VotingForm({ categories }: VotingFormProps) {
       }
     }
   }, [state, toast, categories]);
+
+  useEffect(() => {
+    const hasVoted = localStorage.getItem('hasVoted');
+    const hasSeenWelcome = sessionStorage.getItem('hasSeenWelcome');
+    if (!hasVoted && !hasSeenWelcome) {
+        setAuthModalOpen(true);
+        sessionStorage.setItem('hasSeenWelcome', 'true');
+    }
+  }, []);
   
   const isSubmitting = isPending || isGuestTransitioning;
 
@@ -153,19 +146,19 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
-                <div className="flex w-full overflow-x-auto pb-4">
-                  <RadioGroup name={category.id} className="flex gap-4">
-                    {category.nominees.map((nominee) => (
-                      <div key={nominee.id} className="w-52 flex-shrink-0">
-                         <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
-                        <Label
-                          htmlFor={`${category.id}-${nominee.id}`}
-                          className="relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary"
-                        >
-                          <div className="absolute top-2 right-2 z-10 h-6 w-6 rounded-full flex items-center justify-center transition-colors border-2 border-muted bg-background/80 text-transparent peer-data-[state=checked]:bg-green-500 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-green-600">
+                <RadioGroup name={category.id} className="flex gap-4 w-full overflow-x-auto pb-4">
+                  {category.nominees.map((nominee) => (
+                    <div key={nominee.id} className="group relative w-52 flex-shrink-0">
+                      <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
+                      <Label
+                        htmlFor={`${category.id}-${nominee.id}`}
+                        className="block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary"
+                      >
+                         <div className="absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-muted bg-background/80 text-transparent transition-colors group-data-[state=checked]:border-green-600 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:text-white">
                             <Check className="h-4 w-4" />
                           </div>
-                          <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
+                        <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
+                          <Link href={`/nominees/${nominee.id}`}>
                             <div className="relative flex flex-col items-center p-4 text-center">
                               <Image
                                 src={nominee.photo}
@@ -178,18 +171,18 @@ export default function VotingForm({ categories }: VotingFormProps) {
                               <p className="font-semibold text-lg">{nominee.name}</p>
                               <p className="text-sm text-muted-foreground">{nominee.organization}</p>
                             </div>
-                          </div>
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
+                          </Link>
+                        </div>
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        <div className="p-6 border rounded-lg bg-transparent">
+        <div className="p-6">
           <div className="max-w-md mx-auto text-center">
               <h3 className="text-xl font-bold tracking-tight">Finalize Your Vote</h3>
               <p className="text-muted-foreground mt-1">
@@ -203,9 +196,9 @@ export default function VotingForm({ categories }: VotingFormProps) {
        <Dialog open={isAuthModalOpen} onOpenChange={setAuthModalOpen}>
         <DialogContent className="bg-transparent">
           <DialogHeader>
-            <DialogTitle>Provide your email to vote</DialogTitle>
+            <DialogTitle>Welcome to the IA Awards!</DialogTitle>
             <DialogDescription>
-              We need your email to ensure every vote is unique. We will not send you spam.
+             Powered By My Event Advisor. Please provide your email to vote. We need your email to ensure every vote is unique.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
@@ -220,7 +213,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
               />
             </div>
             <Button onClick={handleGuestLogin} disabled={isGuestTransitioning || !guestEmail} className="w-full">
-              {isGuestTransitioning ? <Loader2 className="animate-spin" /> : "Continue & Vote"}
+              {isGuestTransitioning ? <Loader2 className="animate-spin" /> : "Continue"}
             </Button>
           </div>
         </DialogContent>
