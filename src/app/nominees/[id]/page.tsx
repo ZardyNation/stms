@@ -10,44 +10,61 @@ import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import CommentForm from './CommentForm';
+import type { Comment } from '@/types';
 
-async function getNominee(id: string) {
+async function getNomineeData(id: string) {
     const supabase = createClient();
     if (!supabase) return null;
 
-    const { data, error } = await supabase
+    const { data: nomineeData, error: nomineeError } = await supabase
         .from('nominees')
-        .select(`
-            *,
-            category:categories ( title ),
-            comments (
-                id,
-                content,
-                created_at,
-                user:users ( email )
-            ),
-            likes ( count )
-        `)
+        .select('*, category:categories (title)')
         .eq('id', id)
         .single();
-
-    if (error) {
-        console.error('Error fetching nominee:', error.message);
+    
+    if (nomineeError) {
+        console.error('Error fetching nominee:', nomineeError.message);
         return null;
     }
 
-    return data;
+    const { data: commentsData, error: commentsError } = await supabase
+        .from('comments')
+        .select('id, content, created_at, user:users (email)')
+        .eq('nominee_id', id)
+        .order('created_at', { ascending: false });
+
+    if (commentsError) {
+        console.error('Error fetching comments:', commentsError.message);
+        // We can still proceed without comments
+    }
+
+    const { count: likeCount, error: likesError } = await supabase
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('nominee_id', id);
+
+     if (likesError) {
+        console.error('Error fetching likes:', likesError.message);
+        // We can still proceed without likes
+    }
+
+    return {
+        ...nomineeData,
+        comments: commentsData || [],
+        likes: likeCount || 0,
+    };
 }
 
+
 export default async function NomineePage({ params }: { params: { id: string } }) {
-    const nominee = await getNominee(params.id);
+    const nominee = await getNomineeData(params.id);
 
     if (!nominee) {
         notFound();
     }
 
-    const likeCount = nominee.likes[0]?.count || 0;
-    const userComments = nominee.comments.filter(c => c.user);
+    const likeCount = nominee.likes;
+    const userComments = nominee.comments.filter((c: Comment) => c.user);
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -107,7 +124,7 @@ export default async function NomineePage({ params }: { params: { id: string } }
                                     <CommentForm nomineeId={nominee.id} />
 
                                     <div className="space-y-6 mt-6">
-                                        {userComments.map((comment) => (
+                                        {userComments.map((comment: Comment) => (
                                             <div key={comment.id} className="flex items-start gap-4">
                                                 <Avatar>
                                                     <AvatarFallback>{comment.user.email.substring(0, 2).toUpperCase()}</AvatarFallback>
