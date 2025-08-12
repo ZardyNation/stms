@@ -148,13 +148,13 @@ export default function VotingForm({ categories }: VotingFormProps) {
               <CardContent className="p-4 sm:p-6">
                 <RadioGroup name={category.id} className="flex gap-4 w-full overflow-x-auto pb-4">
                   {category.nominees.map((nominee) => (
-                    <div key={nominee.id} className="group relative w-52 flex-shrink-0">
-                      <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
+                    <div key={nominee.id} className="group/nominee relative w-52 flex-shrink-0">
+                       <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
                       <Label
                         htmlFor={`${category.id}-${nominee.id}`}
                         className="block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary"
                       >
-                         <div className="absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-muted bg-background/80 text-transparent transition-colors group-data-[state=checked]:border-green-600 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:text-white">
+                         <div className="absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-muted bg-background/80 text-transparent transition-colors group-data-[state=checked]:border-primary group-data-[state=checked]:bg-primary group-data-[state=checked]:text-primary-foreground">
                             <Check className="h-4 w-4" />
                           </div>
                         <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
@@ -194,7 +194,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
       </form>
 
        <Dialog open={isAuthModalOpen} onOpenChange={setAuthModalOpen}>
-        <DialogContent className="bg-transparent">
+        <DialogContent className="bg-accent text-accent-foreground">
           <DialogHeader>
             <DialogTitle>Welcome to the IA Awards!</DialogTitle>
             <DialogDescription>
@@ -210,9 +210,10 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 placeholder="you@example.com"
                 value={guestEmail}
                 onChange={(e) => setGuestEmail(e.target.value)}
+                className="bg-accent-foreground/10 text-accent-foreground placeholder:text-accent-foreground/50"
               />
             </div>
-            <Button onClick={handleGuestLogin} disabled={isGuestTransitioning || !guestEmail} className="w-full">
+            <Button onClick={handleGuestLogin} disabled={isGuestTransitioning || !guestEmail} className="w-full bg-accent-foreground text-accent hover:bg-accent-foreground/90">
               {isGuestTransitioning ? <Loader2 className="animate-spin" /> : "Continue"}
             </Button>
           </div>
