@@ -66,7 +66,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-       <header className="bg-card border-b py-4">
+       <header className="bg-card/80 backdrop-blur-sm border-b py-4 sticky top-0 z-50">
             <div className="container mx-auto flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl">
@@ -85,7 +85,7 @@ export default async function ProfilePage() {
                 </div>
             </div>
         </header>
-        <main className="flex-1 bg-muted/20 py-8 sm:py-12">
+        <main className="flex-1 bg-black/20 py-8 sm:py-12">
             <div className="container mx-auto">
                 <Card>
                     <CardHeader>
@@ -106,7 +106,7 @@ export default async function ProfilePage() {
                                 if (!nominee) return null;
 
                                 return (
-                                    <div key={category.id} className="p-4 rounded-lg border bg-background">
+                                    <div key={category.id} className="p-4 rounded-lg border bg-background/50">
                                         <h3 className="font-semibold text-lg mb-3">{category.title}</h3>
                                         <div className="flex items-center gap-4">
                                             <Image

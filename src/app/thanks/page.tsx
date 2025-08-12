@@ -5,8 +5,8 @@ import Link from 'next/link'
 
 export default function ThanksPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md text-center">
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <Card className="w-full max-w-md text-center bg-card/80 backdrop-blur-sm">
         <CardHeader>
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                 <CheckCircle className="h-6 w-6 text-green-600" />

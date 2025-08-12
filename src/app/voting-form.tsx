@@ -145,7 +145,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
       <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
         <div className="space-y-8">
           {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category) => (
-            <Card key={category.id} className="overflow-hidden bg-muted/20">
+            <Card key={category.id} className="overflow-hidden bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
               </CardHeader>
@@ -157,7 +157,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
                         <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="sr-only" />
                         <Label
                           htmlFor={`${category.id}-${nominee.id}`}
-                          className="group block h-full cursor-pointer rounded-lg border-2 bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
+                          className="group block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
                         >
                           <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
                             <div className="relative flex flex-col items-center p-4 text-center">
@@ -183,7 +183,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
           ))}
         </div>
 
-        <div className="p-6 border rounded-lg bg-card/80">
+        <div className="p-6 border rounded-lg bg-card/80 backdrop-blur-sm">
           <div className="max-w-md mx-auto text-center">
               <h3 className="text-xl font-bold tracking-tight">Finalize Your Vote</h3>
               <p className="text-muted-foreground mt-1">
@@ -195,7 +195,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
       </form>
 
        <Dialog open={isAuthModalOpen} onOpenChange={setAuthModalOpen}>
-        <DialogContent>
+        <DialogContent className="bg-card/80 backdrop-blur-sm">
           <DialogHeader>
             <DialogTitle>Provide your email to vote</DialogTitle>
             <DialogDescription>

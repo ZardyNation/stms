@@ -10,11 +10,11 @@ html {
   :root {
     --background: 0 0% 2%;
     --foreground: 210 40% 98%;
-    --card: 0 0% 4%;
+    --card: 0 0% 8%;
     --card-foreground: 210 40% 98%;
     --popover: 0 0% 4%;
     --popover-foreground: 210 40% 98%;
-    --primary: 3 95% 61%;
+    --primary: 347 77% 50%;
     --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -26,7 +26,7 @@ html {
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 3 95% 61%;
+    --ring: 347 77% 50%;
     --radius: 0.75rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -38,11 +38,11 @@ html {
   .dark {
     --background: 0 0% 2%;
     --foreground: 210 40% 98%;
-    --card: 0 0% 4%;
+    --card: 0 0% 8%;
     --card-foreground: 210 40% 98%;
     --popover: 0 0% 4%;
     --popover-foreground: 210 40% 98%;
-    --primary: 3 95% 61%;
+    --primary: 347 77% 50%;
     --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -54,7 +54,7 @@ html {
     --destructive-foreground: 0 0% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 3 95% 61%;
+    --ring: 347 77% 50%;
   }
 }
 
@@ -64,5 +64,16 @@ html {
   }
   body {
     @apply bg-background text-foreground;
+    background-image: url('/background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .bg-card {
+    background-color: hsla(var(--card), 0.8);
+    backdrop-filter: blur(12px);
   }
 }
