@@ -72,7 +72,7 @@ export default async function Home() {
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter mt-4">
                 <span className="bg-primary text-primary-foreground px-2 rounded-md font-bold">IA</span> <span className="font-bold">Awards</span>
             </h1>
-            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
+            <p className="text-foreground mt-3 max-w-2xl mx-auto">
                 Welcome to the Impact Awards, celebrating outstanding achievements. Cast your vote for the nominees who have made a significant impact.
             </p>
         </div>
