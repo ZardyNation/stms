@@ -1,4 +1,5 @@
 
+
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
@@ -36,11 +37,11 @@ export default async function Home() {
             <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                     <h3 className="text-2xl font-bold tracking-tight">Hosted by the Incomparable</h3>
-                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2">Amanda Seales</p>
+                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform -rotate-2">Amanda Seales</p>
                 </div>
                 <div>
                     <h3 className="text-2xl font-bold tracking-tight">Special Live Performance by</h3>
-                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2">Vivian Green</p>
+                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform rotate-2">Vivian Green</p>
                 </div>
             </div>
         </section>
@@ -171,3 +172,5 @@ export default async function Home() {
     </div>
   );
 }
+
+    
