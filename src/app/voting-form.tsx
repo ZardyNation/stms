@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useActionState, useState, useTransition } from 'react';
@@ -155,14 +156,14 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 <div className="flex w-full overflow-x-auto pb-4">
                   <RadioGroup name={category.id} className="flex gap-4">
                     {category.nominees.map((nominee) => (
-                      <div key={nominee.id} className="group w-52 flex-shrink-0">
-                        <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="sr-only" />
+                      <div key={nominee.id} className="w-52 flex-shrink-0">
+                         <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
                         <Label
                           htmlFor={`${category.id}-${nominee.id}`}
-                          className="relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group-data-[state=checked]:border-primary group-data-[state=checked]:ring-2 group-data-[state=checked]:ring-primary"
+                          className="relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary"
                         >
-                          <div className="absolute top-2 right-2 z-10 h-6 w-6 rounded-full flex items-center justify-center transition-colors border-2 border-muted bg-white group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-600">
-                            <Check className="h-4 w-4 text-white" />
+                          <div className="absolute top-2 right-2 z-10 h-6 w-6 rounded-full flex items-center justify-center transition-colors border-2 border-muted bg-background/80 text-transparent peer-data-[state=checked]:bg-green-500 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-green-600">
+                            <Check className="h-4 w-4" />
                           </div>
                           <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
                             <div className="relative flex flex-col items-center p-4 text-center">
