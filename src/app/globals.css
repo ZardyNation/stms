@@ -95,7 +95,7 @@ html {
   position: absolute;
   width: 6px;
   height: 6px;
-  background: white;
+  background: #FFD700;
   border-radius: 50%;
   filter: blur(1px);
   animation: sparkle linear infinite;
