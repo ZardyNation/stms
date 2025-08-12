@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -157,8 +157,11 @@ export default function VotingForm({ categories }: VotingFormProps) {
                         <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="sr-only" />
                         <Label
                           htmlFor={`${category.id}-${nominee.id}`}
-                          className="group block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
+                          className="group relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
                         >
+                           <div className="absolute top-2 right-2 z-10 hidden group-has-[input:checked]:block">
+                             <CheckCircle className="h-6 w-6 text-primary bg-background rounded-full" />
+                           </div>
                           <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
                             <div className="relative flex flex-col items-center p-4 text-center">
                               <Image
