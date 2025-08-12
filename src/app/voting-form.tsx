@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Loader2 } from 'lucide-react';
+import { Check, CheckCircle, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -159,11 +159,11 @@ export default function VotingForm({ categories }: VotingFormProps) {
                         <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="sr-only" />
                         <Label
                           htmlFor={`${category.id}-${nominee.id}`}
-                          className="relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group-data-[state=checked]:border-primary group-data-[state=checked]:ring-2 group-data-[state=checked]:ring-primary"
+                          className="relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group-data-[state=checked]:border-primary group-data-[state=checked]:ring-2 group-data-[state=checked]:ring-primary"
                         >
-                           <div className="absolute top-2 right-2 z-10 opacity-0 group-data-[state=checked]:opacity-100 transition-opacity">
-                             <CheckCircle className="h-6 w-6 text-accent" />
-                           </div>
+                          <div className="absolute top-2 right-2 z-10 h-6 w-6 rounded-full bg-background/80 flex items-center justify-center transition-colors group-data-[state=checked]:bg-accent">
+                            <Check className="h-4 w-4 text-transparent transition-colors group-data-[state=checked]:text-white" />
+                          </div>
                           <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
                             <div className="relative flex flex-col items-center p-4 text-center">
                               <Image
