@@ -7,9 +7,9 @@ export function Logo() {
       <Image 
         src="/logo.png" 
         alt="STMS OWN Logo" 
-        width={480} 
-        height={160}
-        className="h-40 w-auto"
+        width={1200} 
+        height={400}
+        className="h-96 w-auto"
       />
     </Link>
   );
