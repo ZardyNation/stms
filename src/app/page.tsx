@@ -13,14 +13,6 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       <main className="container mx-auto py-6 sm:py-8">
-        <div className="absolute top-4 right-4 z-50 flex items-center gap-2">
-            <Button variant="ghost" asChild>
-                <Link href="/admin">
-                    <Shield className="mr-2 h-4 w-4" />
-                    Admin
-                </Link>
-            </Button>
-        </div>
         
         <section className="w-full text-center pt-12 pb-16 flex flex-col items-center">
             <Logo />
