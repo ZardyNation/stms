@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { Shield, Award, Mic, Ticket, Flower, Pin, Users, Calendar, Trophy, Star } from 'lucide-react';
+import { Shield, Award, Mic, Ticket, Flower, Pin, Users, Calendar, Trophy, Star, Check } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FeaturedNominees from './FeaturedNominees';
