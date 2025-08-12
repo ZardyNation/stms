@@ -162,7 +162,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
                           className="group relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
                         >
                            <div className="absolute top-2 right-2 z-10 hidden group-has-[input:checked]:block">
-                             <CheckCircle className="h-6 w-6 text-primary" />
+                             <CheckCircle className="h-6 w-6 text-accent" />
                            </div>
                           <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
                             <div className="relative flex flex-col items-center p-4 text-center">
