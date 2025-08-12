@@ -40,8 +40,8 @@ export default async function Home() {
                     <p className="text-5xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform -rotate-2">Amanda Seales</p>
                 </div>
                 <div>
-                    <h3 className="text-2xl font-bold tracking-tight">Special Live Performance by</h3>
-                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform rotate-2">Vivian Green</p>
+                    <h3 className="text-2xl font-bold tracking-tight">Live Performances by</h3>
+                    <p className="text-4xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform rotate-2">Yahni Redd, U.N.T Da Boss, and many more</p>
                 </div>
             </div>
         </section>
