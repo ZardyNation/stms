@@ -155,13 +155,13 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 <div className="flex w-full overflow-x-auto pb-4">
                   <RadioGroup name={category.id} className="flex gap-4">
                     {category.nominees.map((nominee) => (
-                      <div key={nominee.id} className="w-52 flex-shrink-0">
+                      <div key={nominee.id} className="group w-52 flex-shrink-0">
                         <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="sr-only" />
                         <Label
                           htmlFor={`${category.id}-${nominee.id}`}
-                          className="group relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
+                          className="relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group-data-[state=checked]:border-primary group-data-[state=checked]:ring-2 group-data-[state=checked]:ring-primary"
                         >
-                           <div className="absolute top-2 right-2 z-10 hidden group-has-[input:checked]:block">
+                           <div className="absolute top-2 right-2 z-10 opacity-0 group-data-[state=checked]:opacity-100 transition-opacity">
                              <CheckCircle className="h-6 w-6 text-accent" />
                            </div>
                           <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
