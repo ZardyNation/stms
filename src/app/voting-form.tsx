@@ -13,13 +13,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -149,7 +142,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
   
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="space-y-12 max-w-5xl mx-auto">
+      <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
         <div className="space-y-8">
           {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category) => (
             <Card key={category.id} className="overflow-hidden bg-muted/20">
@@ -157,44 +150,34 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
-                 <Carousel
-                  opts={{
-                    align: "start",
-                    dragFree: true,
-                  }}
-                  className="w-full"
-                >
-                  <CarouselContent>
-                     <RadioGroup name={category.id}>
-                        {category.nominees.map((nominee, index) => (
-                          <CarouselItem key={index} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-                             <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="sr-only" />
-                             <Label
-                                htmlFor={`${category.id}-${nominee.id}`}
-                                className="group block h-full cursor-pointer rounded-lg border-2 bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
-                              >
-                                <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
-                                  <div className="relative flex flex-col items-center p-4 text-center">
-                                    <Image
-                                      src={nominee.photo}
-                                      alt={`Photo of ${nominee.name}`}
-                                      width={128}
-                                      height={128}
-                                      className="mb-4 h-32 w-32 rounded-full object-cover ring-1 ring-border"
-                                      data-ai-hint={nominee.aiHint}
-                                    />
-                                    <p className="font-semibold text-lg">{nominee.name}</p>
-                                    <p className="text-sm text-muted-foreground">{nominee.organization}</p>
-                                  </div>
-                                </div>
-                             </Label>
-                          </CarouselItem>
-                        ))}
-                     </RadioGroup>
-                   </CarouselContent>
-                   <CarouselPrevious className="ml-12" />
-                   <CarouselNext className="mr-12"/>
-                </Carousel>
+                <div className="flex w-full overflow-x-auto pb-4">
+                  <RadioGroup name={category.id} className="flex gap-4">
+                    {category.nominees.map((nominee) => (
+                      <div key={nominee.id} className="w-52 flex-shrink-0">
+                        <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="sr-only" />
+                        <Label
+                          htmlFor={`${category.id}-${nominee.id}`}
+                          className="group block h-full cursor-pointer rounded-lg border-2 bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
+                        >
+                          <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
+                            <div className="relative flex flex-col items-center p-4 text-center">
+                              <Image
+                                src={nominee.photo}
+                                alt={`Photo of ${nominee.name}`}
+                                width={128}
+                                height={128}
+                                className="mb-4 h-32 w-32 rounded-full object-cover ring-1 ring-border"
+                                data-ai-hint={nominee.aiHint}
+                              />
+                              <p className="font-semibold text-lg">{nominee.name}</p>
+                              <p className="text-sm text-muted-foreground">{nominee.organization}</p>
+                            </div>
+                          </div>
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
               </CardContent>
             </Card>
           ))}
