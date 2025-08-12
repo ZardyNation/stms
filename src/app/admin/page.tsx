@@ -3,11 +3,12 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Home, Pencil } from 'lucide-react';
+import { Home, Pencil, LogOut } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Category, Nominee } from '@/types';
 import NomineeManager from './NomineeManager';
+import { logout } from './login/actions';
 
 async function getCategories(): Promise<Category[]> {
   const supabase = createClient();
@@ -92,6 +93,12 @@ export default async function AdminPage() {
                                 Vote
                             </Link>
                         </Button>
+                        <form action={logout}>
+                            <Button variant="ghost" type="submit">
+                                <LogOut className="mr-2 h-4 w-4" />
+                                Logout
+                            </Button>
+                        </form>
                     </div>
                 </div>
                 

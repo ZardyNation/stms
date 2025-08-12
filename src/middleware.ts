@@ -5,9 +5,16 @@ export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request)
 
   if (supabase) {
-    // Refresh session if expired - required for Server Components
-    // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
     await supabase.auth.getSession()
+  }
+
+  const { pathname } = request.nextUrl
+
+  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
+    const sessionCookie = request.cookies.get('admin-session');
+    if (!sessionCookie || sessionCookie.value !== 'true') {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
   }
 
   return response
