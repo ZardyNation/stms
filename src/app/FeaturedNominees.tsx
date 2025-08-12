@@ -84,7 +84,7 @@ export default function FeaturedNominees() {
                                 />
                                 <div className="mt-4 text-center">
                                     <p className="font-semibold text-lg">{nominee.name}</p>
-                                    <p className="text-sm text-muted-foreground">{nominee.organization}</p>
+                                    <p className="text-sm text-foreground">{nominee.organization}</p>
                                 </div>
                             </CardContent>
                         </Card>

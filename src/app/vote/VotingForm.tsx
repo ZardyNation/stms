@@ -109,7 +109,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 <CardHeader className="text-center">
                     <Trophy className="h-8 w-8 mx-auto text-primary" />
                     <CardTitle className="font-bold tracking-tight text-2xl">{category.title}</CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-foreground">
                         {
                             {
                                 "Community Leadership Award": "Honoring grassroots leaders who’ve made a lasting local impact.",
@@ -145,7 +145,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
                                     data-ai-hint={nominee.aiHint}
                                 />
                                 <p className="font-semibold text-lg">{nominee.name}</p>
-                                <p className="text-sm text-muted-foreground">{nominee.organization}</p>
+                                <p className="text-sm text-foreground">{nominee.organization}</p>
                                 </div>
                             </Link>
                             </div>
@@ -162,7 +162,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
         <section id="finalize-vote" className="p-6">
           <div className="max-w-md mx-auto text-center">
               <h3 className="text-xl font-bold tracking-tight">🗳 Your Vote is Your Voice — Use It Now!</h3>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-foreground mt-1">
                 Click the button below to cast your votes. One vote per person, per category. You may be asked for your email to ensure fairness.
               </p>
             <SubmitButton pending={isSubmitting} />

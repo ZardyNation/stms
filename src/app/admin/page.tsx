@@ -78,7 +78,7 @@ export default async function AdminPage() {
                         <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl">
                             Admin Dashboard
                         </h1>
-                        <p className="text-sm text-muted-foreground">Manage your awards content.</p>
+                        <p className="text-sm text-foreground">Manage your awards content.</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <Button variant="ghost" asChild>
@@ -108,14 +108,14 @@ export default async function AdminPage() {
                 <Card className="bg-transparent border-0 shadow-none">
                     <CardHeader>
                         <CardTitle>Live Vote Counts</CardTitle>
-                        <CardDescription>
+                        <CardDescription className="text-foreground">
                            This is the current tally for each nominee. Total votes cast: {voteData?.total ?? 0}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         {!voteData && <p>Could not retrieve vote counts.</p>}
                         {voteData && voteData.total === 0 && (
-                            <div className="text-center text-muted-foreground py-8">
+                            <div className="text-center text-foreground py-8">
                                 No votes have been cast yet.
                             </div>
                         )}

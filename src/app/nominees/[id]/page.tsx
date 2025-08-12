@@ -61,7 +61,7 @@ export default async function NomineePage({ params }: { params: { id: string } }
                                         className="h-48 w-48 rounded-full object-cover mx-auto mb-4 ring-4 ring-primary/20"
                                     />
                                     <h1 className="text-2xl font-bold">{nominee.name}</h1>
-                                    <p className="text-muted-foreground">{nominee.organization}</p>
+                                    <p className="text-foreground">{nominee.organization}</p>
                                     <Badge variant="secondary" className="mt-2">{nominee.category.title}</Badge>
                                 </CardContent>
                             </Card>

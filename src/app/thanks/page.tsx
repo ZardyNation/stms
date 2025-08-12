@@ -12,7 +12,7 @@ export default function ThanksPage() {
                 <CheckCircle className="h-6 w-6 text-yellow-600" />
             </div>
           <CardTitle className="mt-4 text-2xl font-bold">Vote Submitted!</CardTitle>
-          <CardDescription>Thank you for participating. Your vote has been successfully recorded.</CardDescription>
+          <CardDescription className="text-foreground">Thank you for participating. Your vote has been successfully recorded.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Button variant="outline" asChild>

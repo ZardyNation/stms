@@ -12,7 +12,7 @@ export default function TicketsPage() {
             <Ticket className="h-6 w-6 text-primary" />
           </div>
           <CardTitle className="mt-4 text-2xl font-bold">Tickets Coming Soon!</CardTitle>
-          <CardDescription>
+          <CardDescription className="text-foreground">
             Ticket sales for The Impact Awards 2025 are not yet open. Please check back later to secure your spot for this unforgettable night.
           </CardDescription>
         </CardHeader>

@@ -35,7 +35,7 @@ export default async function VotePage() {
                     <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
                         🗳 Vote for the 2025 Impact Awards Winners!
                     </h1>
-                    <p className="text-muted-foreground mt-3 max-w-3xl mx-auto">
+                    <p className="text-foreground mt-3 max-w-3xl mx-auto">
                         These are the change-makers, visionaries, and community leaders who inspire us all. Now it’s your turn to help decide who takes home the gold on Saturday, October 12, 2025.
                     </p>
                     <p className="text-primary font-bold mt-2">
@@ -49,17 +49,17 @@ export default async function VotePage() {
                         <div className="flex flex-col items-center">
                             <User className="h-10 w-10 mb-4 text-primary" />
                             <h3 className="font-bold text-lg">1. Review the Nominees</h3>
-                            <p className="text-sm text-muted-foreground">Learn about each finalist and their incredible work.</p>
+                            <p className="text-sm text-foreground">Learn about each finalist and their incredible work.</p>
                         </div>
                          <div className="flex flex-col items-center">
                             <Check className="h-10 w-10 mb-4 text-primary" />
                             <h3 className="font-bold text-lg">2. Make Your Choice</h3>
-                            <p className="text-sm text-muted-foreground">Click the “Vote” button under your selection in each category.</p>
+                            <p className="text-sm text-foreground">Click the “Vote” button under your selection in each category.</p>
                         </div>
                          <div className="flex flex-col items-center">
                             <Calendar className="h-10 w-10 mb-4 text-primary" />
                             <h3 className="font-bold text-lg">3. Join Us Live</h3>
-                            <p className="text-sm text-muted-foreground">Winners will be revealed only at the Impact Awards during Stop the Madness Week’s Grand Finale.</p>
+                            <p className="text-sm text-foreground">Winners will be revealed only at the Impact Awards during Stop the Madness Week’s Grand Finale.</p>
                         </div>
                     </div>
                 </section>
@@ -75,14 +75,14 @@ export default async function VotePage() {
 
                  <section id="why-vote" className="my-16 text-center">
                      <h2 className="text-3xl font-bold tracking-tight">Your Voice Decides the Winners — and Their Moment of a Lifetime.</h2>
-                    <p className="mt-4 text-lg text-muted-foreground max-w-4xl mx-auto">
+                    <p className="mt-4 text-lg text-foreground max-w-4xl mx-auto">
                        For every nominee, this recognition is more than an award — it’s proof that their work matters, that people are watching, and that they’re making a difference. Your vote isn’t just a click. It’s a standing ovation before they even step on stage.
                     </p>
                 </section>
 
                 <section id="see-it-live" className="my-16 bg-card p-8 rounded-lg text-center">
                     <h2 className="text-3xl font-bold tracking-tight">🎟 Be in the Room When the Winners Are Revealed</h2>
-                    <p className="mt-4 text-lg text-muted-foreground max-w-4xl mx-auto">
+                    <p className="mt-4 text-lg text-foreground max-w-4xl mx-auto">
                         The Impact Awards aren’t just announced online — they’re brought to life in an unforgettable gold carpet experience, runway fashion show, live performances, and our high-energy awards ceremony. Don’t just vote... be there to cheer, clap, and celebrate when your favorite takes the stage.
                     </p>
                     <Button asChild size="lg" className="mt-8">
@@ -90,7 +90,7 @@ export default async function VotePage() {
                     </Button>
                 </section>
 
-                <footer className="text-center text-sm text-muted-foreground border-t pt-8 mt-16">
+                <footer className="text-center text-sm text-foreground border-t pt-8 mt-16">
                     <h3 className="font-bold text-lg mb-2">Voting Rules</h3>
                     <ul className="space-y-1">
                         <li>● One vote per person per category.</li>
