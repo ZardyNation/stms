@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useActionState, useState, useTransition } from 'react';
@@ -54,6 +55,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
   const [state, formAction, isSubmitting] = useActionState<FormState, FormData>(submitVote, initialState);
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [isGuestTransitioning, startGuestTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [guestEmail, setGuestEmail] = useState('');
   
   const form = useForm();
@@ -80,7 +82,9 @@ export default function VotingForm({ categories }: VotingFormProps) {
      if(state.status === 'error' && state.message.includes('log in')) {
         setAuthModalOpen(true);
      } else {
-        formAction(formData);
+        startTransition(() => {
+          formAction(formData);
+        });
      }
   };
   
@@ -101,7 +105,9 @@ export default function VotingForm({ categories }: VotingFormProps) {
                  formData.append(key, values[key]);
             }
         });
-        formAction(formData);
+        startTransition(() => {
+          formAction(formData);
+        });
 
       } else {
         toast({
@@ -200,7 +206,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
               <p className="text-muted-foreground mt-1">
                 Click the button below to cast your votes. You may be asked for your email.
               </p>
-            <SubmitButton pending={isSubmitting} />
+            <SubmitButton pending={isSubmitting || isPending} />
           </div>
         </div>
       </form>
