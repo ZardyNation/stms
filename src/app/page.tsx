@@ -36,8 +36,8 @@ export default async function Home() {
         <section className="my-16 text-center" id="host">
             <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
-                    <h3 className="text-2xl font-bold tracking-tight">Hosted by the Incomparable</h3>
-                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform -rotate-2">Amanda Seales</p>
+                    <h3 className="text-2xl font-bold tracking-tight">IA Awards Hosted by</h3>
+                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform -rotate-2">Tamika "GeorgiaMe" Harpe</p>
                 </div>
                 <div>
                     <h3 className="text-2xl font-bold tracking-tight">Live Performances by</h3>
@@ -172,5 +172,3 @@ export default async function Home() {
     </div>
   );
 }
-
-    
