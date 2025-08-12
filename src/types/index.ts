@@ -14,12 +14,3 @@ export interface Category {
   nominees: Nominee[];
   tbd?: boolean;
 }
-
-export interface Comment {
-    id: string;
-    content: string;
-    created_at: string;
-    user: {
-        email: string;
-    };
-}

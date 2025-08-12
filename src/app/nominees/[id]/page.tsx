@@ -5,12 +5,8 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Home, ThumbsUp, MessageSquare } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Home } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import CommentForm from './CommentForm';
-import type { Comment } from '@/types';
 
 async function getNomineeData(id: string) {
     const supabase = createClient();
@@ -27,32 +23,7 @@ async function getNomineeData(id: string) {
         return null;
     }
 
-    const { data: commentsData, error: commentsError } = await supabase
-        .from('comments')
-        .select('id, content, created_at, user:users (email)')
-        .eq('nominee_id', id)
-        .order('created_at', { ascending: false });
-
-    if (commentsError) {
-        console.error('Error fetching comments:', commentsError.message);
-        // We can still proceed without comments
-    }
-
-    const { count: likeCount, error: likesError } = await supabase
-        .from('likes')
-        .select('*', { count: 'exact', head: true })
-        .eq('nominee_id', id);
-
-     if (likesError) {
-        console.error('Error fetching likes:', likesError.message);
-        // We can still proceed without likes
-    }
-
-    return {
-        ...nomineeData,
-        comments: commentsData || [],
-        likes: likeCount || 0,
-    };
+    return nomineeData;
 }
 
 
@@ -62,9 +33,6 @@ export default async function NomineePage({ params }: { params: { id: string } }
     if (!nominee) {
         notFound();
     }
-
-    const likeCount = nominee.likes;
-    const userComments = nominee.comments.filter((c: Comment) => c.user);
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -102,48 +70,11 @@ export default async function NomineePage({ params }: { params: { id: string } }
                         <div className="md:col-span-2">
                              <Card>
                                 <CardHeader>
-                                    <CardTitle>Community Feedback</CardTitle>
+                                    <CardTitle>Nominee Details</CardTitle>
+                                    <CardDescription>Information about the nominee.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="flex items-center gap-6 mb-6">
-                                        <div className="flex items-center gap-2">
-                                            <ThumbsUp className="h-6 w-6 text-primary" />
-                                            <span className="text-xl font-bold">{likeCount}</span>
-                                            <span className="text-muted-foreground">Likes</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <MessageSquare className="h-6 w-6 text-primary" />
-                                            <span className="text-xl font-bold">{userComments.length}</span>
-                                            <span className="text-muted-foreground">Comments</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <Separator className="my-6" />
-
-                                    <h3 className="text-lg font-semibold mb-4">Comments</h3>
-                                    <CommentForm nomineeId={nominee.id} />
-
-                                    <div className="space-y-6 mt-6">
-                                        {userComments.map((comment: Comment) => (
-                                            <div key={comment.id} className="flex items-start gap-4">
-                                                <Avatar>
-                                                    <AvatarFallback>{comment.user.email.substring(0, 2).toUpperCase()}</AvatarFallback>
-                                                </Avatar>
-                                                <div className="w-full">
-                                                    <div className="flex items-center justify-between">
-                                                        <p className="font-semibold">{comment.user.email}</p>
-                                                        <p className="text-xs text-muted-foreground">
-                                                            {new Date(comment.created_at).toLocaleDateString()}
-                                                        </p>
-                                                    </div>
-                                                    <p className="text-muted-foreground mt-1">{comment.content}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                        {userComments.length === 0 && (
-                                            <p className="text-muted-foreground text-center py-4">Be the first to leave a comment!</p>
-                                        )}
-                                    </div>
+                                    <p>More details about the nominee can be displayed here in the future.</p>
                                 </CardContent>
                              </Card>
                         </div>
