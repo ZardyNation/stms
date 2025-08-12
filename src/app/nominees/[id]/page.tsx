@@ -24,7 +24,7 @@ async function getNominee(id: string) {
                 id,
                 content,
                 created_at,
-                user:profiles ( email )
+                user:users ( email )
             ),
             likes ( count )
         `)
@@ -32,7 +32,7 @@ async function getNominee(id: string) {
         .single();
 
     if (error) {
-        console.error('Error fetching nominee:', error);
+        console.error('Error fetching nominee:', error.message);
         return null;
     }
 
@@ -47,6 +47,7 @@ export default async function NomineePage({ params }: { params: { id: string } }
     }
 
     const likeCount = nominee.likes[0]?.count || 0;
+    const userComments = nominee.comments.filter(c => c.user);
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -95,7 +96,7 @@ export default async function NomineePage({ params }: { params: { id: string } }
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <MessageSquare className="h-6 w-6 text-primary" />
-                                            <span className="text-xl font-bold">{nominee.comments.length}</span>
+                                            <span className="text-xl font-bold">{userComments.length}</span>
                                             <span className="text-muted-foreground">Comments</span>
                                         </div>
                                     </div>
@@ -106,7 +107,7 @@ export default async function NomineePage({ params }: { params: { id: string } }
                                     <CommentForm nomineeId={nominee.id} />
 
                                     <div className="space-y-6 mt-6">
-                                        {nominee.comments.map((comment) => (
+                                        {userComments.map((comment) => (
                                             <div key={comment.id} className="flex items-start gap-4">
                                                 <Avatar>
                                                     <AvatarFallback>{comment.user.email.substring(0, 2).toUpperCase()}</AvatarFallback>
@@ -122,7 +123,7 @@ export default async function NomineePage({ params }: { params: { id: string } }
                                                 </div>
                                             </div>
                                         ))}
-                                        {nominee.comments.length === 0 && (
+                                        {userComments.length === 0 && (
                                             <p className="text-muted-foreground text-center py-4">Be the first to leave a comment!</p>
                                         )}
                                     </div>
