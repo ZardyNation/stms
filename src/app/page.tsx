@@ -6,6 +6,7 @@ import { AuthButton } from './auth/AuthButton';
 import Link from 'next/link';
 import { User, Shield } from 'lucide-react';
 import type { Category } from '@/types';
+import { Logo } from '@/components/logo';
 
 async function getCategories(): Promise<Category[]> {
   const supabase = createClient();
@@ -36,46 +37,47 @@ async function isAdmin() {
 async function Header() {
   const supabase = createClient();
   if (!supabase) {
-    return redirect('/login?message=Supabase is not configured. Please check your environment variables.');
+    // This path should ideally not be reached if Supabase is configured
+    return (
+      <header className="bg-card border-b py-4">
+        <div className="container mx-auto flex items-center justify-between">
+            <Logo />
+            <p className="text-sm text-destructive">Supabase not configured.</p>
+        </div>
+      </header>
+    )
   }
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect('/login');
-  }
-
-  const showAdminLink = await isAdmin();
+  const showAdminLink = user && await isAdmin();
 
   return (
     <header className="bg-card border-b py-4">
       <div className="container mx-auto flex items-center justify-between">
-        <div className="flex flex-col items-start gap-1">
-          <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl">
-            Impact Awards Voting
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Welcome, {user.email}
-          </p>
-        </div>
+        <Logo />
         <div className="flex items-center gap-2">
-           <Button variant="ghost" asChild>
-              <Link href="/profile">
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </Link>
-            </Button>
-            {showAdminLink && (
-              <Button variant="ghost" asChild>
-                <Link href="/admin">
-                  <Shield className="mr-2 h-4 w-4" />
-                  Admin
-                </Link>
-              </Button>
+            {user && (
+               <>
+                <Button variant="ghost" asChild>
+                    <Link href="/profile">
+                        <User className="mr-2 h-4 w-4" />
+                        Profile
+                    </Link>
+                </Button>
+                {showAdminLink && (
+                  <Button variant="ghost" asChild>
+                    <Link href="/admin">
+                      <Shield className="mr-2 h-4 w-4" />
+                      Admin
+                    </Link>
+                  </Button>
+                )}
+                <AuthButton />
+               </>
             )}
-          <AuthButton />
         </div>
       </div>
     </header>
@@ -83,28 +85,20 @@ async function Header() {
 }
 
 export default async function Home() {
-  const supabase = createClient();
-
-  if (!supabase) {
-    redirect('/login?message=Supabase is not configured. Please check your environment variables.');
-    return;
-  }
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect('/login');
-    return;
-  }
-  
   const categories = await getCategories();
 
   return (
     <div className="bg-background min-h-screen">
       <Header />
       <main className="container mx-auto py-8 sm:py-12">
+        <div className="text-center mb-12">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="bg-primary text-primary-foreground px-2 rounded-md">IA</span> Awards
+            </h1>
+            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
+                Welcome to the Impact Awards, celebrating outstanding achievements. Cast your vote for the nominees who have made a significant impact.
+            </p>
+        </div>
         <VotingForm categories={categories} />
       </main>
       <footer className="container mx-auto py-6 text-center text-muted-foreground text-sm">
