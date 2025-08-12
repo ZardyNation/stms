@@ -126,9 +126,8 @@ export default function VotingForm({ categories }: VotingFormProps) {
   }, [state, toast, categories]);
 
   useEffect(() => {
-    const hasVoted = localStorage.getItem('hasVoted');
     const hasSeenWelcome = sessionStorage.getItem('hasSeenWelcome');
-    if (!hasVoted && !hasSeenWelcome) {
+    if (!hasSeenWelcome) {
         setAuthModalOpen(true);
         sessionStorage.setItem('hasSeenWelcome', 'true');
     }
