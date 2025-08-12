@@ -4,6 +4,8 @@ import { AuthButton } from './auth/AuthButton';
 import Link from 'next/link';
 import { User, Shield, Pencil } from 'lucide-react';
 import { Logo } from '@/components/logo';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import FeaturedNominees from './FeaturedNominees';
 
 async function isAdmin() {
   const supabase = createClient();
@@ -46,7 +48,8 @@ export default async function Home() {
                </>
             )}
         </div>
-        <div className="w-full text-center mb-8 p-6 flex flex-col items-center">
+        
+        <section className="w-full text-center pt-12 pb-16 flex flex-col items-center">
             <Logo />
             <div className="mt-4 text-foreground">
                 <p className="text-xl sm:text-2xl font-light tracking-tight">Stop The Maddness Presents</p>
@@ -56,29 +59,46 @@ export default async function Home() {
                 <p className="text-xl sm:text-2xl font-light tracking-tight">Hosted by</p>
                 <p className="text-2xl sm:text-3xl font-semibold mt-1">Tamika "GeorgiaMe" Harper</p>
             </div>
-        </div>
+        </section>
 
-        <div className="w-full text-center mb-12 p-6">
-            <p className="text-foreground/90 max-w-3xl mx-auto text-lg">
-                My Event Advisor dedicates itself to recognizing industry leaders and game changers.
-            </p>
-            <div className="mt-8">
-                <h2 className="text-2xl font-bold tracking-tight">With live performances from...</h2>
-                <p className="text-muted-foreground mt-2">Coming soon: details about our amazing performers!</p>
-            </div>
-        </div>
+        <section className="my-16">
+            <FeaturedNominees />
+        </section>
 
-        <div className="text-center">
-          <Button asChild size="lg">
-              <Link href="/vote">
-                  <Pencil className="mr-2" />
-                  Cast Your Vote Now
-              </Link>
-          </Button>
-        </div>
+        <section className="grid md:grid-cols-2 gap-8 my-16 text-center">
+             <Card className="bg-card">
+                <CardHeader>
+                    <CardTitle>About The Awards</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-foreground/90 max-w-xl mx-auto text-lg">
+                        My Event Advisor dedicates itself to recognizing industry leaders and game changers. The Impact Awards celebrate outstanding achievements and those who have made a significant impact.
+                    </p>
+                </CardContent>
+            </Card>
+             <Card className="bg-card">
+                <CardHeader>
+                    <CardTitle>Live Performances</CardTitle>
+                </CardHeader>
+                <CardContent>
+                     <p className="text-muted-foreground mt-2">Coming soon: details about our amazing performers!</p>
+                </CardContent>
+            </Card>
+        </section>
+        
+        <section className="w-full text-center my-16 p-8 bg-card rounded-lg">
+             <h2 className="text-3xl font-bold tracking-tight">Ready to Make Your Voice Heard?</h2>
+             <p className="text-muted-foreground mt-2 mb-6">Your vote matters. Help us celebrate the best of the best.</p>
+             <Button asChild size="lg">
+                 <Link href="/vote">
+                     <Pencil className="mr-2" />
+                     Cast Your Vote Now
+                 </Link>
+             </Button>
+        </section>
         
       </main>
-      <footer className="container mx-auto py-4 text-center text-sm">
+      <footer className="container mx-auto py-4 text-center text-sm text-foreground/70">
         <p>Please note: One vote per category per user. All duplicate entries will be invalidated.</p>
       </footer>
     </div>
