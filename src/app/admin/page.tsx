@@ -120,10 +120,12 @@ export default async function AdminPage() {
                 </div>
             </div>
         </header>
-        <main className="flex-1 bg-black/20 py-6 sm:py-8">
+        <main className="flex-1 py-6 sm:py-8">
             <div className="container mx-auto grid gap-8">
-                <NomineeManager categories={categories} />
-                <Card>
+                <Card className="bg-transparent border-0 shadow-none">
+                    <NomineeManager categories={categories} />
+                </Card>
+                <Card className="bg-transparent border-0 shadow-none">
                     <CardHeader>
                         <CardTitle>Live Vote Counts</CardTitle>
                         <CardDescription>

@@ -147,7 +147,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
       <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
         <div className="space-y-8">
           {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category) => (
-            <Card key={category.id} className="overflow-hidden bg-card/80 backdrop-blur-sm">
+            <Card key={category.id} className="overflow-hidden bg-transparent border-0 shadow-none">
               <CardHeader>
                 <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
               </CardHeader>
@@ -188,7 +188,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
           ))}
         </div>
 
-        <div className="p-6 border rounded-lg bg-card/80 backdrop-blur-sm">
+        <div className="p-6 border rounded-lg bg-transparent">
           <div className="max-w-md mx-auto text-center">
               <h3 className="text-xl font-bold tracking-tight">Finalize Your Vote</h3>
               <p className="text-muted-foreground mt-1">
@@ -200,7 +200,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
       </form>
 
        <Dialog open={isAuthModalOpen} onOpenChange={setAuthModalOpen}>
-        <DialogContent className="bg-card/80 backdrop-blur-sm">
+        <DialogContent className="bg-transparent">
           <DialogHeader>
             <DialogTitle>Provide your email to vote</DialogTitle>
             <DialogDescription>

@@ -91,7 +91,7 @@ export default async function Home() {
     <div className="min-h-screen">
       <Header />
       <main className="container mx-auto py-6 sm:py-8">
-        <div className="text-center mb-8 rounded-xl bg-card/80 backdrop-blur-sm p-6">
+        <div className="text-center mb-8 p-6">
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
                 <span className="bg-primary text-primary-foreground px-2 rounded-md font-bold">IA</span> <span className="font-bold">Awards</span>
             </h1>
@@ -101,7 +101,7 @@ export default async function Home() {
         </div>
         <VotingForm categories={categories} />
       </main>
-      <footer className="container mx-auto py-4 text-center text-background bg-foreground/80 rounded-t-lg text-sm">
+      <footer className="container mx-auto py-4 text-center text-sm">
         <p>Please note: One vote per category per user. All duplicate entries will be invalidated.</p>
       </footer>
     </div>

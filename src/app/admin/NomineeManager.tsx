@@ -62,8 +62,8 @@ export default function NomineeManager({ categories }: NomineeManagerProps) {
 
   return (
     <>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="bg-transparent border-0 shadow-none p-0">
+        <CardHeader className="flex flex-row items-center justify-between px-0">
             <div>
                 <CardTitle>Manage Nominees</CardTitle>
                 <CardDescription>Add, edit, or delete award nominees.</CardDescription>
@@ -73,7 +73,7 @@ export default function NomineeManager({ categories }: NomineeManagerProps) {
                 Add Nominee
             </Button>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <div className="rounded-md border">
             <Table>
               <TableHeader>
