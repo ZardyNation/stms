@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { Shield, Award, Mic, Ticket, Flower, Pin, Users, Calendar, Trophy, Star, Check } from 'lucide-react';
+import { Shield, Award, Mic, Ticket, Flower, Pin, Users, Calendar, Trophy, Star } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FeaturedNominees from './FeaturedNominees';
@@ -28,10 +28,23 @@ export default async function Home() {
             <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <Button asChild size="lg"><Link href="#">Nominate Someone</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote for a Nominee</Link></Button>
-                <Button asChild size="lg"><Link href="#">Get Tickets & Tables</Link></Button>
+                <Button asChild size="lg"><Link href="/tickets">Get Tickets & Tables</Link></Button>
             </div>
         </section>
         
+        <section className="my-16 text-center" id="host">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 className="text-2xl font-bold tracking-tight">Hosted by the Incomparable</h3>
+                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2">Amanda Seales</p>
+                </div>
+                <div>
+                    <h3 className="text-2xl font-bold tracking-tight">Special Live Performance by</h3>
+                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2">Vivian Green</p>
+                </div>
+            </div>
+        </section>
+
         <section className="my-16 text-center" id="about">
             <Flower className="h-12 w-12 mx-auto text-primary" />
             <h2 className="text-3xl font-bold tracking-tight mt-4">✨ Because Change-Makers Deserve Their Flowers While They’re Here</h2>
@@ -130,7 +143,7 @@ export default async function Home() {
                  <Card className="bg-card flex flex-col"><CardHeader><CardTitle>VIP Tables</CardTitle></CardHeader><CardContent className="flex-grow"><p className="text-muted-foreground">Reserved seating for 8–10 guests, full VIP perks, and host recognition from the stage.</p></CardContent></Card>
              </div>
              <div className="text-center mt-8">
-                <Button asChild size="lg"><Link href="#">Get Tickets & Tables</Link></Button>
+                <Button asChild size="lg"><Link href="/tickets">Get Tickets & Tables</Link></Button>
              </div>
         </section>
 
@@ -146,7 +159,7 @@ export default async function Home() {
              <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <Button asChild size="lg"><Link href="#">Nominate Now</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote Now</Link></Button>
-                <Button asChild size="lg"><Link href="#">Buy Tickets</Link></Button>
+                <Button asChild size="lg"><Link href="/tickets">Buy Tickets</Link></Button>
             </div>
         </section>
         
