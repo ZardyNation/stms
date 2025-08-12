@@ -1,4 +1,3 @@
-
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -23,16 +22,17 @@ async function getNomineeData(id: string) {
         return null;
     }
 
-    return nomineeData;
+    return { nominee: nomineeData, comments: [], likes: 0, userHasLiked: false };
 }
 
 
 export default async function NomineePage({ params }: { params: { id: string } }) {
-    const nominee = await getNomineeData(params.id);
+    const data = await getNomineeData(params.id);
 
-    if (!nominee) {
+    if (!data) {
         notFound();
     }
+    const { nominee } = data;
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -41,7 +41,7 @@ export default async function NomineePage({ params }: { params: { id: string } }
                     <div className="flex items-center justify-between mb-8">
                         <div>
                             <Button variant="ghost" asChild>
-                                <Link href="/">
+                                <Link href="/vote">
                                     <Home className="mr-2 h-4 w-4" />
                                     Back to Voting
                                 </Link>

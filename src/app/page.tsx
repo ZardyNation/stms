@@ -1,29 +1,9 @@
-import VotingForm from './voting-form';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
 import { AuthButton } from './auth/AuthButton';
 import Link from 'next/link';
-import { User, Shield } from 'lucide-react';
-import type { Category } from '@/types';
+import { User, Shield, Pencil } from 'lucide-react';
 import { Logo } from '@/components/logo';
-
-async function getCategories(): Promise<Category[]> {
-  const supabase = createClient();
-  if (!supabase) return [];
-  const { data, error } = await supabase.from('categories').select(`
-    id,
-    title,
-    tbd,
-    nominees ( id, name, organization, photo, "aiHint" )
-  `);
-  if (error) {
-    console.error('Error fetching categories:', error);
-    return [];
-  }
-  return data as Category[];
-}
-
 
 async function isAdmin() {
   const supabase = createClient();
@@ -35,7 +15,6 @@ async function isAdmin() {
 }
 
 export default async function Home() {
-  const categories = await getCategories();
   const supabase = createClient();
   const {
     data: { user },
@@ -86,8 +65,16 @@ export default async function Home() {
                 <p className="text-muted-foreground mt-2">Coming soon: details about our amazing performers!</p>
             </div>
         </div>
+
+        <div className="text-center">
+          <Button asChild size="lg">
+              <Link href="/vote">
+                  <Pencil className="mr-2" />
+                  Cast Your Vote Now
+              </Link>
+          </Button>
+        </div>
         
-        <VotingForm categories={categories} />
       </main>
       <footer className="container mx-auto py-4 text-center text-sm">
         <p>Please note: One vote per category per user. All duplicate entries will be invalidated.</p>

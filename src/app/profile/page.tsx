@@ -79,7 +79,7 @@ export default async function ProfilePage() {
                         <Button variant="ghost" asChild>
                             <Link href="/">
                                 <Home className="mr-2 h-4 w-4" />
-                                Vote
+                                Home
                             </Link>
                         </Button>
                         <AuthButton />
@@ -127,7 +127,7 @@ export default async function ProfilePage() {
                      {!userVotes && (
                         <CardContent>
                             <Button asChild>
-                                <Link href="/">
+                                <Link href="/vote">
                                     <Pencil className="mr-2" />
                                     Cast Your Vote
                                 </Link>

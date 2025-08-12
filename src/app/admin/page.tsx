@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { AuthButton } from '../auth/AuthButton';
-import { Home, User } from 'lucide-react';
+import { Home, User, Pencil } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Category, Nominee } from '@/types';
@@ -108,13 +108,19 @@ export default async function AdminPage() {
                         <Button variant="ghost" asChild>
                             <Link href="/">
                                 <Home className="mr-2 h-4 w-4" />
-                                Vote
+                                Home
                             </Link>
                         </Button>
                          <Button variant="ghost" asChild>
                             <Link href="/profile">
                                 <User className="mr-2 h-4 w-4" />
                                 Profile
+                            </Link>
+                        </Button>
+                         <Button variant="ghost" asChild>
+                            <Link href="/vote">
+                                <Pencil className="mr-2 h-4 w-4" />
+                                Vote
                             </Link>
                         </Button>
                         <AuthButton />

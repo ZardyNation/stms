@@ -7,12 +7,12 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/types';
-import { submitVote, type FormState, loginAsGuest } from './actions';
+import { submitVote, type FormState, loginAsGuest } from '../actions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
-import { Check, Loader2 } from 'lucide-react';
+import { Check, Loader2, Home } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { createClient } from '@/lib/supabase/client';
+
 
 interface VotingFormProps {
   categories: Category[];
@@ -44,7 +46,8 @@ const initialState: FormState = {
   status: 'idle',
 };
 
-export default function VotingForm({ categories }: VotingFormProps) {
+
+function VotingForm({ categories }: VotingFormProps) {
   const { toast } = useToast();
   const [state, formAction] = useActionState<FormState, FormData>(submitVote, initialState);
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
@@ -53,8 +56,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
   const [guestEmail, setGuestEmail] = useState('');
   
   const form = useForm();
-  const { getValues } = form;
-
+  
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -145,15 +147,15 @@ export default function VotingForm({ categories }: VotingFormProps) {
                 <CardTitle className="font-bold tracking-tight text-xl">{category.title}</CardTitle>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
-                <RadioGroup name={category.id} className="flex gap-4 w-full overflow-x-auto pb-4">
+                 <RadioGroup name={category.id} className="flex gap-4 w-full overflow-x-auto pb-4">
                   {category.nominees.map((nominee) => (
                     <div key={nominee.id} className="group/nominee relative w-52 flex-shrink-0">
-                       <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
+                      <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
                       <Label
                         htmlFor={`${category.id}-${nominee.id}`}
-                        className="block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary"
+                        className="block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary"
                       >
-                         <div className="absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-muted bg-background/80 text-transparent transition-colors group-data-[state=checked]:border-primary group-data-[state=checked]:bg-primary group-data-[state=checked]:text-primary-foreground">
+                         <div className="absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-muted bg-background/80 text-transparent transition-colors peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground">
                             <Check className="h-4 w-4" />
                           </div>
                         <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
@@ -220,4 +222,66 @@ export default function VotingForm({ categories }: VotingFormProps) {
       </Dialog>
     </>
   );
+}
+
+
+export default function VotePage() {
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchCategories() {
+            const supabase = createClient();
+            if (!supabase) return;
+
+            const { data, error } = await supabase.from('categories').select(`
+                id,
+                title,
+                tbd,
+                nominees ( id, name, organization, photo, "aiHint" )
+            `);
+
+            if (error) {
+                console.error('Error fetching categories:', error);
+            } else {
+                setCategories(data as Category[]);
+            }
+            setLoading(false);
+        }
+
+        fetchCategories();
+    }, []);
+
+    return (
+        <div className="min-h-screen">
+            <main className="container mx-auto py-6 sm:py-8">
+                 <div className="absolute top-4 left-4 z-50">
+                    <Button variant="ghost" asChild>
+                        <Link href="/">
+                            <Home className="mr-2 h-4 w-4" />
+                            Back to Home
+                        </Link>
+                    </Button>
+                </div>
+
+                <div className="w-full text-center mb-8">
+                    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                        Cast Your Vote
+                    </h1>
+                    <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
+                        Select your favorite nominee in each category below.
+                    </p>
+                </div>
+
+                {loading ? (
+                    <div className="text-center">
+                        <Loader2 className="mx-auto h-12 w-12 animate-spin" />
+                        <p>Loading categories...</p>
+                    </div>
+                ) : (
+                    <VotingForm categories={categories} />
+                )}
+            </main>
+        </div>
+    );
 }
