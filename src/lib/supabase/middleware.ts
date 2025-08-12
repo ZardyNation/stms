@@ -12,10 +12,10 @@ export function createClient(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("YOUR_SUPABASE_URL")) {
+  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === 'YOUR_SUPABASE_URL') {
     // If Supabase credentials aren't configured, we can't do anything.
-    // Return a null client and the original response.
-    // The middleware will then bypass auth checks.
+    // We'll log a warning and bypass auth checks.
+     console.warn("Supabase credentials are not set or are placeholders. Skipping auth in middleware.");
     return { supabase: null, response }
   }
 
