@@ -9,7 +9,7 @@ export function Logo() {
         alt="STMS OWN Logo" 
         width={1200} 
         height={400}
-        className="h-96 w-auto"
+        className="w-auto h-48 sm:h-64 md:h-80 lg:h-96"
       />
     </Link>
   );
