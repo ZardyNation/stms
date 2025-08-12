@@ -66,27 +66,25 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-       <header className="bg-card/80 backdrop-blur-sm border-b py-2 sticky top-0 z-50">
-            <div className="container mx-auto flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl">
-                        Your Profile
-                    </h1>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" asChild>
-                        <Link href="/">
-                            <Home className="mr-2 h-4 w-4" />
-                            Vote
-                        </Link>
-                    </Button>
-                    <AuthButton />
-                </div>
-            </div>
-        </header>
         <main className="flex-1 py-6 sm:py-8">
             <div className="container mx-auto">
+                 <div className="flex items-center justify-between mb-8">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl">
+                            Your Profile
+                        </h1>
+                        <p className="text-sm text-muted-foreground">{user.email}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button variant="ghost" asChild>
+                            <Link href="/">
+                                <Home className="mr-2 h-4 w-4" />
+                                Vote
+                            </Link>
+                        </Button>
+                        <AuthButton />
+                    </div>
+                </div>
                 <Card className="bg-transparent border-0 shadow-none">
                     <CardHeader>
                         <CardTitle>Your Submitted Votes</CardTitle>

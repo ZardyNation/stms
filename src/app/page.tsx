@@ -34,20 +34,9 @@ async function isAdmin() {
   return user?.email === process.env.ADMIN_EMAIL;
 }
 
-async function Header() {
+export default async function Home() {
+  const categories = await getCategories();
   const supabase = createClient();
-  if (!supabase) {
-    // This path should ideally not be reached if Supabase is configured
-    return (
-      <header className="bg-card/80 backdrop-blur-sm border-b py-2 sticky top-0 z-50">
-        <div className="container mx-auto flex items-center justify-between">
-            <Logo />
-            <p className="text-sm text-destructive">Supabase not configured.</p>
-        </div>
-      </header>
-    )
-  }
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -55,11 +44,10 @@ async function Header() {
   const showAdminLink = user && await isAdmin();
 
   return (
-    <header className="bg-card/80 backdrop-blur-sm border-b py-2 sticky top-0 z-50">
-      <div className="container mx-auto flex items-center justify-between">
-        <Logo />
-        <div className="flex items-center gap-2">
-            {user && (
+    <div className="min-h-screen">
+      <main className="container mx-auto py-6 sm:py-8">
+        <div className="absolute top-4 right-4 z-50 flex items-center gap-2">
+           {user && (
                <>
                 <Button variant="ghost" asChild>
                     <Link href="/profile">
@@ -79,20 +67,9 @@ async function Header() {
                </>
             )}
         </div>
-      </div>
-    </header>
-  );
-}
-
-export default async function Home() {
-  const categories = await getCategories();
-
-  return (
-    <div className="min-h-screen">
-      <Header />
-      <main className="container mx-auto py-6 sm:py-8">
-        <div className="text-center mb-8 p-6">
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+        <div className="w-full text-center mb-8 p-6 flex flex-col items-center">
+            <Logo />
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter mt-4">
                 <span className="bg-primary text-primary-foreground px-2 rounded-md font-bold">IA</span> <span className="font-bold">Awards</span>
             </h1>
             <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
