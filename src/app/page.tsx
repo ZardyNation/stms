@@ -76,6 +76,17 @@ export default async function Home() {
                 Welcome to the Impact Awards, celebrating outstanding achievements. Cast your vote for the nominees who have made a significant impact.
             </p>
         </div>
+
+        <div className="w-full text-center mb-12 p-6">
+            <p className="text-foreground/90 max-w-3xl mx-auto text-lg">
+                My Event Advisor dedicates itself to recognizing industry leaders and game changers.
+            </p>
+            <div className="mt-8">
+                <h2 className="text-2xl font-bold tracking-tight">With live performances from...</h2>
+                <p className="text-muted-foreground mt-2">Coming soon: details about our amazing performers!</p>
+            </div>
+        </div>
+        
         <VotingForm categories={categories} />
       </main>
       <footer className="container mx-auto py-4 text-center text-sm">
