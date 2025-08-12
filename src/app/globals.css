@@ -75,3 +75,29 @@ html {
     backdrop-filter: blur(12px);
   }
 }
+
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) translateY(-15px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translateY(-30px);
+  }
+}
+
+.sparkle-instance {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  filter: blur(1px);
+  animation: sparkle linear infinite;
+  pointer-events: none;
+}

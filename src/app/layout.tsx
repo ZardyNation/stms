@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import Sparkles from '@/components/Sparkles';
 
 export const metadata: Metadata = {
   title: 'Impact Awards Voting Central',
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground">
+        <Sparkles />
         {children}
         <Toaster />
       </body>
