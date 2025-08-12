@@ -45,7 +45,7 @@ const initialState: FormState = {
 
 export default function VotingForm({ categories }: VotingFormProps) {
   const { toast } = useToast();
-  const [state, formAction, isSubmitting] = useActionState<FormState, FormData>(submitVote, initialState);
+  const [state, formAction] = useActionState<FormState, FormData>(submitVote, initialState);
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [isGuestTransitioning, startGuestTransition] = useTransition();
   const [isPending, startTransition] = useTransition();
@@ -140,6 +140,8 @@ export default function VotingForm({ categories }: VotingFormProps) {
     }
   }, [state, toast, categories]);
   
+  const isSubmitting = isPending || isGuestTransitioning;
+
   return (
     <>
       <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
@@ -160,7 +162,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
                           className="group relative block h-full cursor-pointer rounded-lg border-2 border-transparent bg-card text-card-foreground shadow-sm transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 has-[input:checked]:border-primary has-[input:checked]:ring-2 has-[input:checked]:ring-primary"
                         >
                            <div className="absolute top-2 right-2 z-10 hidden group-has-[input:checked]:block">
-                             <CheckCircle className="h-6 w-6 text-primary bg-background rounded-full" />
+                             <CheckCircle className="h-6 w-6 text-primary" />
                            </div>
                           <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
                             <div className="relative flex flex-col items-center p-4 text-center">
@@ -192,7 +194,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
               <p className="text-muted-foreground mt-1">
                 Click the button below to cast your votes. You may be asked for your email.
               </p>
-            <SubmitButton pending={isSubmitting || isPending} />
+            <SubmitButton pending={isSubmitting} />
           </div>
         </div>
       </form>
