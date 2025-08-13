@@ -39,7 +39,7 @@ export default async function Home() {
                 <Card className="bg-card text-left">
                     <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-6">
                         <Image 
-                            src="https://placehold.co/150x150.png"
+                            src="/hostess.jpg"
                             alt="Host Photo"
                             width={150}
                             height={150}
