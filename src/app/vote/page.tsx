@@ -34,6 +34,9 @@ export default async function VotePage() {
                     <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
                         🗳 Vote for the 2025 Impact Awards Winners!
                     </h1>
+                    <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">
+                        Voting closes September 20, 2025. at 11:59 PM EST — every vote counts!
+                    </p>
                 </header>
 
                 {categories.length === 0 ? (
