@@ -7,6 +7,7 @@ import { Shield, Award, Mic, Ticket, Flower, Pin, Users, Calendar, Trophy, Star,
 import { Logo } from '@/components/logo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FeaturedNominees from './FeaturedNominees';
+import Image from 'next/image';
 
 
 export default async function Home() {
@@ -34,15 +35,39 @@ export default async function Home() {
         </section>
         
         <section className="my-16 text-center" id="host">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                    <h3 className="text-2xl font-bold tracking-tight">IA Awards Hosted by</h3>
-                    <p className="text-5xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform -rotate-2">Tamika "GeorgiaMe" Harpe</p>
-                </div>
-                <div>
-                    <h3 className="text-2xl font-bold tracking-tight">Live Performances, Fashion Show and More</h3>
-                    <p className="text-3xl font-extrabold text-primary tracking-tighter my-2 inline-block bg-white text-black px-4 py-2 transform rotate-2">Fashion Presented by Face2Face Talent & Modeling Agency - Terri Steven’s</p>
-                </div>
+            <div className="grid md:grid-cols-2 gap-8 items-stretch">
+                <Card className="bg-card text-left">
+                    <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-6">
+                        <Image 
+                            src="https://placehold.co/150x150.png"
+                            alt="Host Photo"
+                            width={150}
+                            height={150}
+                            className="rounded-full w-24 h-24 sm:w-32 sm:h-32 object-cover"
+                            data-ai-hint="professional woman"
+                        />
+                        <div>
+                            <h3 className="text-xl font-bold tracking-tight">IA Awards Hosted by</h3>
+                            <p className="text-3xl font-extrabold text-primary tracking-tighter my-1">Tamika "GeorgiaMe" Harpe</p>
+                        </div>
+                    </CardContent>
+                </Card>
+                 <Card className="bg-card text-left">
+                    <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-6">
+                         <Image 
+                            src="https://placehold.co/150x150.png"
+                            alt="Fashion Show Photo"
+                            width={150}
+                            height={150}
+                            className="rounded-full w-24 h-24 sm:w-32 sm:h-32 object-cover"
+                            data-ai-hint="fashion runway model"
+                        />
+                        <div>
+                            <h3 className="text-xl font-bold tracking-tight">Live Performances, Fashion Show and More</h3>
+                            <p className="text-lg font-semibold text-foreground my-1">Fashion Presented by Face2Face Talent & Modeling Agency - Terri Steven’s</p>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </section>
 
