@@ -1,9 +1,10 @@
 
+
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Home, Pencil, LogOut } from 'lucide-react';
+import { Home, Pencil, LogOut, User } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Category, Nominee } from '@/types';
@@ -24,6 +25,18 @@ async function getCategories(): Promise<Category[]> {
     return [];
   }
   return data as Category[];
+}
+
+async function getVoters() {
+    const supabase = createClient();
+    if (!supabase) return [];
+    const { data, error } = await supabase.from('votes').select('email, selections, created_at').order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching voters:', error);
+        return [];
+    }
+    return data;
 }
 
 async function getVoteCounts(categories: Category[]) {
@@ -68,6 +81,7 @@ async function getVoteCounts(categories: Category[]) {
 export default async function AdminPage() {
     const categories = await getCategories();
     const voteData = await getVoteCounts(categories);
+    const voters = await getVoters();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -78,7 +92,7 @@ export default async function AdminPage() {
                         <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl">
                             Admin Dashboard
                         </h1>
-                        <p className="text-sm text-foreground">Manage your awards content.</p>
+                        <p className="text-foreground">Manage your awards content.</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <Button variant="ghost" asChild>
@@ -146,6 +160,48 @@ export default async function AdminPage() {
                                 </div>
                            </div>
                         ))}
+                    </CardContent>
+                </Card>
+                
+                <Card className="bg-transparent border-0 shadow-none">
+                    <CardHeader>
+                        <CardTitle>Voter List</CardTitle>
+                        <CardDescription className="text-foreground">
+                           A list of everyone who has submitted a vote.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <div className="rounded-md border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Email</TableHead>
+                                        <TableHead>Selections</TableHead>
+                                        <TableHead className="text-right">Date</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {voters.length === 0 && (
+                                        <TableRow>
+                                            <TableCell colSpan={3} className="text-center h-24">No voters yet.</TableCell>
+                                        </TableRow>
+                                    )}
+                                    {voters.map((voter, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell className="font-medium">{voter.email}</TableCell>
+                                            <TableCell>
+                                                <pre className="text-xs bg-muted p-2 rounded-md">
+                                                    {JSON.stringify(voter.selections, null, 2)}
+                                                </pre>
+                                            </TableCell>
+                                             <TableCell className="text-right">
+                                                {new Date(voter.created_at).toLocaleString()}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
