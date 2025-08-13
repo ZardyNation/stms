@@ -103,7 +103,6 @@ export default function VotingForm({ categories }: VotingFormProps) {
     <>
       <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
         <section id="categories">
-            <h2 className="text-3xl font-bold tracking-tight text-center mb-12">The Categories</h2>
             <div className="space-y-8">
             {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category) => (
                 <Card key={category.id} className="overflow-hidden bg-transparent border-0 shadow-none">
@@ -111,17 +110,17 @@ export default function VotingForm({ categories }: VotingFormProps) {
                     <Trophy className="h-8 w-8 mx-auto text-primary" />
                     <CardTitle className="font-bold tracking-tight text-2xl">{category.title}</CardTitle>
                     <CardDescription className="text-foreground">
-                         {
-                            {
-                                "Community Leadership Award": "For leaders who help their communities grow, planting seeds for a better tomorrow.",
-                                "Innovator Award": "For the minds that dare to create, shaping the future and sealing our fate.",
-                                "Arts & Culture Impact Award": "For the artists who color our world and inspire, setting our hearts and our spirits on fire.",
-                                "Youth Visionary Award": "For the young ones who lead with a voice, making the future a better choice.",
-                                "Legacy Award": "For the icons whose work will prevail, leaving a long and inspiring trail.",
-                                "Youth Empowerment Award": "For those who lift the youth up high, teaching them how to reach for the sky.",
-                                "Father Figure Award": "For the mentors who guide and protect, showing us kindness, love, and respect.",
-                                "Mother Figure Award": "For the nurturers who help us to bloom, lighting up even the darkest of rooms."
-                            }[category.title] || "Vote for your favorite nominee in this category."
+                        {
+                          {
+                            "Community Leadership Award": "For leaders who help their communities grow, planting seeds for a better tomorrow.",
+                            "Innovator Award": "For the minds that dare to create, shaping the future and sealing our fate.",
+                            "Arts & Culture Impact Award": "For the artists who color our world and inspire, setting our hearts and our spirits on fire.",
+                            "Youth Visionary Award": "For the young ones who lead with a voice, making the future a better choice.",
+                            "Legacy Award": "For the icons whose work will prevail, leaving a long and inspiring trail.",
+                            "Youth Empowerment Award": "For those who lift the youth up high, teaching them how to reach for the sky.",
+                            "Father Figure Award": "For the mentors who guide and protect, showing us kindness, love, and respect.",
+                            "Mother Figure Award": "For the nurturers who help us to bloom, lighting up even the darkest of rooms."
+                          }[category.title] || "Vote for your favorite nominee in this category."
                         }
                     </CardDescription>
                 </CardHeader>
