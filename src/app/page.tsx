@@ -8,9 +8,11 @@ import { Logo } from '@/components/logo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FeaturedNominees from './FeaturedNominees';
 import Image from 'next/image';
+import { getFeaturedNominees } from './actions';
 
 
 export default async function Home() {
+  const featuredNominees = await getFeaturedNominees();
 
   return (
     <div className="min-h-screen">
@@ -167,7 +169,7 @@ export default async function Home() {
         </section>
 
         <section className="my-16">
-            <FeaturedNominees />
+            <FeaturedNominees nominees={featuredNominees} />
         </section>
 
         <section className="w-full text-center my-16 p-8 bg-card rounded-lg">

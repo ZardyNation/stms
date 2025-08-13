@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import type { Category } from '@/types';
+import type { Category, Nominee } from '@/types';
 
 async function getCategories(): Promise<Category[]> {
   const supabase = createClient();
@@ -21,6 +21,24 @@ async function getCategories(): Promise<Category[]> {
     return [];
   }
   return data as Category[];
+}
+
+export async function getFeaturedNominees(): Promise<Nominee[]> {
+    const supabase = createClient();
+    if (!supabase) return [];
+
+    const { data, error } = await supabase
+        .from('nominees')
+        .select('*')
+        .limit(10); // Adjust limit as needed
+
+    if (error) {
+        console.error('Error fetching featured nominees:', error);
+        return [];
+    }
+
+    // Since Supabase doesn't have a built-in random(), we'll shuffle the results that we get.
+    return data.sort(() => 0.5 - Math.random()).slice(0, 6);
 }
 
 
@@ -140,4 +158,3 @@ export async function submitVote(prevState: FormState, formData: FormData): Prom
 
   redirect('/thanks');
 }
-
