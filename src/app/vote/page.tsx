@@ -1,4 +1,5 @@
 
+
 import { createClient } from '@/lib/supabase/server';
 import { Loader2, User, Check, Calendar, Ticket } from 'lucide-react';
 import type { Category } from '@/types';
@@ -86,7 +87,7 @@ export default async function VotePage() {
                         The Impact Awards aren’t just announced online — they’re brought to life in an unforgettable gold carpet experience, runway fashion show, live performances, and our high-energy awards ceremony. Don’t just vote... be there to cheer, clap, and celebrate when your favorite takes the stage.
                     </p>
                     <Button asChild size="lg" className="mt-8">
-                        <Link href="#">Get Tickets & Tables Now</Link>
+                        <Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Get Tickets & Tables Now</Link>
                     </Button>
                 </section>
 

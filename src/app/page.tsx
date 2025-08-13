@@ -30,7 +30,7 @@ export default async function Home() {
             <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <Button asChild size="lg"><Link href="#">Nominate a Change-Maker</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote for a Nominee</Link></Button>
-                <Button asChild size="lg"><Link href="/tickets">Get Tickets & Tables</Link></Button>
+                <Button asChild size="lg"><Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Get Tickets & Tables</Link></Button>
             </div>
         </section>
         
@@ -165,7 +165,7 @@ export default async function Home() {
                  <Card className="bg-card flex flex-col"><CardHeader><CardTitle>VIP Tables</CardTitle></CardHeader><CardContent className="flex-grow"><p className="text-foreground">Reserved seating for 8–10 guests, full VIP perks, and host recognition from the stage.</p></CardContent></Card>
              </div>
              <div className="text-center mt-8">
-                <Button asChild size="lg"><Link href="/tickets">Get Tickets & Tables</Link></Button>
+                <Button asChild size="lg"><Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Get Tickets & Tables</Link></Button>
              </div>
         </section>
 
@@ -181,7 +181,7 @@ export default async function Home() {
              <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <Button asChild size="lg"><Link href="#">Nominate a Change-Maker</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote Now</Link></Button>
-                <Button asChild size="lg"><Link href="/tickets">Buy Tickets</Link></Button>
+                <Button asChild size="lg"><Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Buy Tickets</Link></Button>
             </div>
         </section>
         

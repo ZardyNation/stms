@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useActionState, useState, useTransition } from 'react';
@@ -167,7 +168,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
               </p>
             <SubmitButton pending={isSubmitting} />
             <Button asChild variant="outline" className="w-full mt-2">
-                <Link href="#">
+                <Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">
                     <Ticket className="mr-2" />
                     Buy Tickets to the Awards
                 </Link>
