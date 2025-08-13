@@ -5,7 +5,7 @@ export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2" prefetch={false}>
       <Image 
-        src="/stms-logo.jpg" 
+        src="/stms%20logo.jpg" 
         alt="STMS Logo" 
         width={1200} 
         height={400}
