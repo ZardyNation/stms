@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
-import { Check, Loader2, Ticket, Trophy } from 'lucide-react';
+import { Loader2, Ticket, Trophy } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
