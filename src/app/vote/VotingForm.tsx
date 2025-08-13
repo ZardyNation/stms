@@ -115,50 +115,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
       <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
         <section id="categories">
             <div className="space-y-8">
-            {categories.filter(c => !c.tbd && c.nominees.length > 0).map((category) => (
-                <Card key={category.id} className="overflow-hidden bg-transparent border-0 shadow-none">
-                <CardHeader className="text-center">
-                    <Trophy className="h-8 w-8 mx-auto text-primary" />
-                    <CardTitle className="font-bold tracking-tight text-2xl">{category.title}</CardTitle>
-                    <CardDescription className="text-foreground">
-                       {rhymingDescriptions[category.title] || 'Vote for your favorite nominee in this category.'}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="p-4 sm:p-6">
-                    <RadioGroup name={category.id} className="flex gap-4 w-full overflow-x-auto pb-4 justify-center">
-                    {category.nominees.map((nominee) => (
-                        <div key={nominee.id} className="group/nominee relative w-52 flex-shrink-0">
-                        <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
-                        <Label
-                            htmlFor={`${category.id}-${nominee.id}`}
-                            className="block h-full cursor-pointer rounded-lg border-2 border-transparent bg-transparent text-card-foreground shadow-sm transition-all peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary"
-                        >
-                            <div className="absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-muted bg-background/80 text-transparent transition-colors peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground">
-                                <Check className="h-4 w-4" />
-                            </div>
-                            <div className="h-full transform transition-transform duration-300 ease-in-out hover:scale-[1.03]">
-                            <Link href={`/nominees/${nominee.id}`}>
-                                <div className="relative flex flex-col items-center p-4 text-center">
-                                <Image
-                                    src={nominee.photo}
-                                    alt={`Photo of ${nominee.name}`}
-                                    width={128}
-                                    height={128}
-                                    className="mb-4 h-32 w-32 rounded-full object-cover ring-1 ring-border"
-                                    data-ai-hint={nominee.aiHint}
-                                />
-                                <p className="font-semibold text-lg">{nominee.name}</p>
-                                <p className="text-sm text-foreground">{nominee.organization}</p>
-                                </div>
-                            </Link>
-                            </div>
-                        </Label>
-                        </div>
-                    ))}
-                    </RadioGroup>
-                </CardContent>
-                </Card>
-            ))}
+              {/* Categories removed as requested */}
             </div>
         </section>
 
