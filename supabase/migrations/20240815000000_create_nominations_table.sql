@@ -1,6 +1,5 @@
-
 CREATE TABLE nominations (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id BIGSERIAL PRIMARY KEY,
     nominee_name TEXT NOT NULL,
     nominee_org TEXT,
     category_id UUID REFERENCES categories(id),
