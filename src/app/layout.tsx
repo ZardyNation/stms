@@ -6,8 +6,8 @@ import { GeistMono } from "geist/font/mono";
 import Sparkles from '@/components/Sparkles';
 
 export const metadata: Metadata = {
-  title: 'Impact Awards Voting Central',
-  description: 'Vote for the IA Awards (Impact Awards) presented by STOP The Madness and powered by My Event Advisor.',
+  title: 'Impact Awards 2025 | Honor, Inspire, Celebrate',
+  description: 'Join us for The Impact Awards 2025, a night to honor, inspire, and celebrate the change-makers in our community. Nominate, vote, and get tickets now!',
 };
 
 export default function RootLayout({

@@ -20,15 +20,14 @@ export default async function Home() {
             <Logo />
             <div className="mt-8 text-foreground">
                 <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter my-2">
-                   🌟 The Impact Awards 2025
+                   🌟 The Impact Awards 2025 — A Night to Honor, Inspire, and Celebrate
                 </h1>
-                 <p className="text-2xl sm:text-3xl font-semibold mt-1">A Night to Honor, Inspire, and Celebrate</p>
                 <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">
                     Join us on Saturday, October 12, 2025, for the Grand Finale of Stop the Madness Week — an unforgettable evening featuring The Impact Awards Ceremony, a runway-stopping fashion show, live performances, and a dazzling Gold Carpet experience.
                 </p>
             </div>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
-                <Button asChild size="lg"><Link href="#">Nominate a Change-Maker</Link></Button>
+                <Button asChild size="lg"><Link href="#">Nominate Someone</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote for a Nominee</Link></Button>
                 <Button asChild size="lg"><Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Get Tickets & Tables</Link></Button>
             </div>
@@ -66,7 +65,6 @@ export default async function Home() {
             </Card>
         </section>
 
-
         <section className="my-16 text-center" id="about">
             <Flower className="h-12 w-12 mx-auto text-primary" />
             <h2 className="text-3xl font-bold tracking-tight mt-4">✨ Because Change-Makers Deserve Their Flowers While They’re Here</h2>
@@ -78,7 +76,7 @@ export default async function Home() {
                     Some honorees are nominated by the public, others are hand-selected by our team — but every name called is someone who has touched lives, broken barriers, or inspired transformation. Whether it’s a neighbor organizing change, a leader driving innovation, or an artist bringing light to the world, we see you. And now, so will everyone else.
                 </p>
             </div>
-            <Button asChild size="lg" className="mt-8"><Link href="#">Nominate a Change-Maker</Link></Button>
+            <Button asChild size="lg" className="mt-8"><Link href="#">Nominate a Change-Maker Today</Link></Button>
         </section>
 
         <section className="my-16 bg-card p-8 rounded-lg" id="how-it-works">
@@ -100,7 +98,7 @@ export default async function Home() {
                  <div className="flex flex-col items-center">
                     <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl mb-4">3</div>
                     <h3 className="text-xl font-semibold">Celebrate</h3>
-                    <p className="text-foreground mt-2">Join us in person on October 12th oak room venue, Marietta, Georgia to see your nominees walk the Gold Carpet, take the stage, and be celebrated.</p>
+                    <p className="text-foreground mt-2">Join us in person on October 12th oak room venue, Marietta, Georgia to see your nominees walk the Gold Carpet, take the stage, and be celebrated in front of the entire community.</p>
                  </div>
              </div>
         </section>
@@ -120,7 +118,7 @@ export default async function Home() {
                             <li className="flex items-start"><Star className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Innovator Award – Honoring groundbreaking ideas that drive change.</span></li>
                             <li className="flex items-start"><Award className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Arts & Culture Impact Award – Celebrating creators who inspire through their craft.</span></li>
                             <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Youth Visionary Award – Spotlighting young leaders making a difference before age 25.</span></li>
-                            <li className="flex items-start"><Trophy className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Youth empowerment award-</span></li>
+                            <li className="flex items-start"><Trophy className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Youth empowerment award</span></li>
                             <li className="flex items-start"><Award className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Legacy Award – Honoring lifelong contributions to progress and empowerment.</span></li>
                             <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Father figure</span></li>
                             <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Mother figure</span></li>
@@ -179,7 +177,7 @@ export default async function Home() {
                 Whether you’re nominating a hero, voting for a finalist, or joining us in person to witness the celebration, your presence matters. This is more than an event — it’s a statement that impact deserves to be seen.
              </p>
              <div className="flex flex-wrap justify-center gap-4 mt-8">
-                <Button asChild size="lg"><Link href="#">Nominate a Change-Maker</Link></Button>
+                <Button asChild size="lg"><Link href="#">Nominate Now</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote Now</Link></Button>
                 <Button asChild size="lg"><Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Buy Tickets</Link></Button>
             </div>

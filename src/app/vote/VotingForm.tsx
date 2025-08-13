@@ -163,9 +163,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
         <section id="finalize-vote" className="p-6">
           <div className="max-w-md mx-auto text-center">
               <h3 className="text-xl font-bold tracking-tight">🗳 Your Vote is Your Voice — Use It Now!</h3>
-              <p className="text-foreground mt-1">
-                Click the button below to cast your votes. One vote per person, per category. You may be asked for your email to ensure fairness.
-              </p>
+              
             <SubmitButton pending={isSubmitting} />
             <Button asChild variant="outline" className="w-full mt-2">
                 <Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">
