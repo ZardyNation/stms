@@ -29,7 +29,7 @@ export default async function Home() {
                 </p>
             </div>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
-                <Button asChild size="lg"><Link href="#">Nominate Someone</Link></Button>
+                <Button asChild size="lg"><Link href="/nominate">Nominate Someone</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote for a Nominee</Link></Button>
                 <Button asChild size="lg"><Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Get Tickets & Tables</Link></Button>
             </div>
@@ -78,7 +78,7 @@ export default async function Home() {
                     Some honorees are nominated by the public, others are hand-selected by our team — but every name called is someone who has touched lives, broken barriers, or inspired transformation. Whether it’s a neighbor organizing change, a leader driving innovation, or an artist bringing light to the world, we see you. And now, so will everyone else.
                 </p>
             </div>
-            <Button asChild size="lg" className="mt-8"><Link href="#">Nominate a Change-Maker Today</Link></Button>
+            <Button asChild size="lg" className="mt-8"><Link href="/nominate">Nominate a Change-Maker Today</Link></Button>
         </section>
 
         <section className="my-16 bg-card p-8 rounded-lg" id="how-it-works">
@@ -178,7 +178,7 @@ export default async function Home() {
                 Whether you’re nominating a hero, voting for a finalist, or joining us in person to witness the celebration, your presence matters. This is more than an event — it’s a statement that impact deserves to be seen.
              </p>
              <div className="flex flex-wrap justify-center gap-4 mt-8">
-                <Button asChild size="lg"><Link href="#">Nominate Now</Link></Button>
+                <Button asChild size="lg"><Link href="/nominate">Nominate Now</Link></Button>
                 <Button asChild size="lg" variant="secondary"><Link href="/vote">Vote Now</Link></Button>
                 <Button asChild size="lg"><Link href="https://www.myeventadvisor.com/event/c3741d06-3920-42e8-abf4-ee2328c8cf97" target="_blank">Buy Tickets</Link></Button>
             </div>
