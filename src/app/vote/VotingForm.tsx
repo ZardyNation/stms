@@ -99,17 +99,6 @@ export default function VotingForm({ categories }: VotingFormProps) {
   
   const isSubmitting = isPending;
 
-  const categoryDescriptions: Record<string, string> = {
-    "Community Leadership Award": "For leaders who help their communities grow, planting seeds for a better tomorrow.",
-    "Innovator Award": "For the minds that dare to create, shaping the future and sealing our fate.",
-    "Arts & Culture Impact Award": "For the artists who color our world and inspire, setting our hearts and our spirits on fire.",
-    "Youth Visionary Award": "For the young ones who lead with a voice, making the future a better choice.",
-    "Legacy Award": "For the icons whose work will prevail, leaving a long and inspiring trail.",
-    "Youth Empowerment Award": "For those who lift the youth up high, teaching them how to reach for the sky.",
-    "Father Figure Award": "For the mentors who guide and protect, showing us kindness, love, and respect.",
-    "Mother Figure Award": "For the nurturers who help us to bloom, lighting up even the darkest of rooms."
-  };
-
   return (
     <>
       <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
@@ -121,7 +110,7 @@ export default function VotingForm({ categories }: VotingFormProps) {
                     <Trophy className="h-8 w-8 mx-auto text-primary" />
                     <CardTitle className="font-bold tracking-tight text-2xl">{category.title}</CardTitle>
                     <CardDescription className="text-foreground">
-                       {categoryDescriptions[category.title] || "Vote for your favorite nominee in this category."}
+                       Vote for your favorite nominee in this category.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6">
