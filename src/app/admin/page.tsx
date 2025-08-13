@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import type { Category, Nominee } from '@/types';
 import NomineeManager from './NomineeManager';
 import { logout } from './login/actions';
+import { Badge } from '@/components/ui/badge';
 
 async function getCategories(): Promise<Category[]> {
   const supabase = createClient();
@@ -82,6 +83,9 @@ export default async function AdminPage() {
     const categories = await getCategories();
     const voteData = await getVoteCounts(categories);
     const voters = await getVoters();
+    
+    const categoryMap = new Map(categories.map(c => [c.id, c.title]));
+    const nomineeMap = new Map(categories.flatMap(c => c.nominees).map(n => [n.id, n.name]));
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -190,9 +194,16 @@ export default async function AdminPage() {
                                         <TableRow key={index}>
                                             <TableCell className="font-medium">{voter.email}</TableCell>
                                             <TableCell>
-                                                <pre className="text-xs bg-muted p-2 rounded-md">
-                                                    {JSON.stringify(voter.selections, null, 2)}
-                                                </pre>
+                                                {voter.selections ? (
+                                                    <div className="flex flex-col gap-1">
+                                                    {Object.entries(voter.selections).map(([catId, nomId]) => (
+                                                        <div key={catId} className="text-xs">
+                                                            <span className="font-semibold">{categoryMap.get(catId) || 'Unknown Category'}:</span>
+                                                            <span className="ml-2 text-foreground">{nomineeMap.get(nomId as string) || 'Unknown Nominee'}</span>
+                                                        </div>
+                                                    ))}
+                                                    </div>
+                                                ) : 'No selections made.'}
                                             </TableCell>
                                              <TableCell className="text-right">
                                                 {new Date(voter.created_at).toLocaleString()}
