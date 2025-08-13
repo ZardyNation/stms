@@ -67,7 +67,7 @@ async function getVoteCounts(categories: Category[]) {
       votes.forEach(vote => {
         if(vote.selections) {
             Object.entries(vote.selections).forEach(([categoryId, nomineeId]) => {
-                if (categoryId in voteCounts && nomineeId && nomineeId in voteCounts[categoryId]) {
+                if (categoryId in voteCounts && nomineeId && voteCounts[categoryId] && nomineeId in voteCounts[categoryId]) {
                     voteCounts[categoryId][nomineeId as string]++;
                 }
             });
@@ -150,7 +150,7 @@ export default async function AdminPage() {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {category.nominees.map((nominee: Nominee) => (
+                                            {category.nominees.sort((a, b) => (voteData.counts[category.id]?.[b.id] ?? 0) - (voteData.counts[category.id]?.[a.id] ?? 0)).map((nominee: Nominee) => (
                                                 <TableRow key={nominee.id}>
                                                     <TableCell className="font-medium">{nominee.name}</TableCell>
                                                     <TableCell>{nominee.organization}</TableCell>
@@ -194,7 +194,7 @@ export default async function AdminPage() {
                                         <TableRow key={index}>
                                             <TableCell className="font-medium">{voter.email}</TableCell>
                                             <TableCell>
-                                                {voter.selections ? (
+                                                {voter.selections && typeof voter.selections === 'object' ? (
                                                     <div className="flex flex-col gap-1">
                                                     {Object.entries(voter.selections).map(([catId, nomId]) => (
                                                         <div key={catId} className="text-xs">
