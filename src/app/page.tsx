@@ -38,7 +38,7 @@ export default async function Home() {
                 <div className="md:grid md:grid-cols-2 items-center">
                     <div className="md:col-span-1">
                         <Image 
-                            src="/hostess.jpg"
+                            src="/hostess.jpg" 
                             alt="Host Photo"
                             width={600}
                             height={600}
@@ -107,22 +107,21 @@ export default async function Home() {
             <div className="text-center mb-12">
                 <Trophy className="h-12 w-12 mx-auto text-primary" />
                 <h2 className="text-3xl font-bold tracking-tight mt-4">🏆 Award Categories & Qualifications</h2>
-                <p className="text-lg text-foreground mt-2">We’re honoring excellence in 9 categories this year. Each category will feature up to 9 nominees.</p>
+                <p className="text-lg text-foreground mt-2">We’re honoring excellence in 8 categories this year.</p>
             </div>
             <Card className="bg-card">
                  <CardContent className="p-6 grid md:grid-cols-2 gap-8">
                      <div>
-                        <h3 className="text-xl font-semibold mb-4">Sample Categories</h3>
+                        <h3 className="text-xl font-semibold mb-4">Award Categories</h3>
                         <ul className="space-y-3 text-foreground">
-                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Community Leadership Award – Recognizing grassroots leaders who have created lasting local impact.</span></li>
-                            <li className="flex items-start"><Star className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Innovator Award – Honoring groundbreaking ideas that drive change.</span></li>
-                            <li className="flex items-start"><Award className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Arts & Culture Impact Award – Celebrating creators who inspire through their craft.</span></li>
-                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Youth Visionary Award – Spotlighting young leaders making a difference before age 25.</span></li>
-                            <li className="flex items-start"><Trophy className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Youth empowerment award</span></li>
-                            <li className="flex items-start"><Award className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Legacy Award – Honoring lifelong contributions to progress and empowerment.</span></li>
-                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Father figure</span></li>
-                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Mother figure</span></li>
-                            <li className="flex items-start"><Trophy className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Tbd</span></li>
+                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Community Leadership Award</span></li>
+                            <li className="flex items-start"><Star className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Innovator Award</span></li>
+                            <li className="flex items-start"><Award className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Arts & Culture Impact Award</span></li>
+                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Youth Visionary Award</span></li>
+                            <li className="flex items-start"><Award className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Legacy Award</span></li>
+                            <li className="flex items-start"><Trophy className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Youth Empowerment Award</span></li>
+                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Father Figure Award</span></li>
+                            <li className="flex items-start"><Users className="h-5 w-5 mr-3 mt-1 text-primary shrink-0" /><span>Mother Figure Award</span></li>
                         </ul>
                      </div>
                      <div>
