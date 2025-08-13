@@ -34,34 +34,38 @@ export default async function Home() {
             </div>
         </section>
         
-        <section className="my-16 text-center" id="host">
-            <div className="grid md:grid-cols-2 gap-8 items-stretch">
-                <Card className="bg-card text-left">
-                    <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-6">
+         <section className="my-16" id="host">
+            <Card className="bg-card text-left overflow-hidden">
+                <div className="md:grid md:grid-cols-2 items-center">
+                    <div className="md:col-span-1">
                         <Image 
                             src="/hostess.jpg"
                             alt="Host Photo"
-                            width={150}
-                            height={150}
-                            className="rounded-full w-32 h-32 sm:w-40 sm:h-40 object-cover"
+                            width={600}
+                            height={600}
+                            className="w-full h-full object-cover"
                             data-ai-hint="professional woman"
                         />
-                        <div>
-                            <h3 className="text-xl font-bold tracking-tight">IA Awards Hosted by</h3>
-                            <p className="text-3xl font-extrabold text-primary tracking-tighter my-1">Tamika "GeorgiaMe" Harpe</p>
-                        </div>
-                    </CardContent>
-                </Card>
-                 <Card className="bg-card text-left">
-                    <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-                        <div>
-                            <h3 className="text-xl font-bold tracking-tight">Live Performances, Fashion Show and More</h3>
-                            <p className="text-lg font-semibold text-foreground my-1">Fashion Presented by Face2Face Talent & Modeling Agency - Terri Steven’s</p>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                    </div>
+                    <div className="md:col-span-1 p-8 sm:p-12">
+                         <h3 className="text-2xl font-bold tracking-tight text-foreground">IA Awards Hosted by</h3>
+                         <p className="text-4xl sm:text-5xl font-extrabold text-primary tracking-tighter my-2">Tamika "GeorgiaMe" Harpe</p>
+                         <p className="text-foreground">Join our incredible host for an evening of celebration and inspiration as we honor the change-makers who are shaping our world.</p>
+                    </div>
+                </div>
+            </Card>
         </section>
+
+        <section className="my-16" id="performances">
+            <Card className="bg-card text-center">
+                <CardContent className="p-8 sm:p-12">
+                    <h3 className="text-2xl font-bold tracking-tight text-foreground">Live Performances, Fashion Show and More</h3>
+                    <p className="text-lg font-semibold text-foreground my-2">Fashion Presented by Face2Face Talent & Modeling Agency - Terri Steven’s</p>
+                    <p className="text-foreground max-w-3xl mx-auto">Prepare to be amazed by a showcase of incredible talent, featuring a high-energy fashion show and unforgettable live performances throughout the night.</p>
+                </CardContent>
+            </Card>
+        </section>
+
 
         <section className="my-16 text-center" id="about">
             <Flower className="h-12 w-12 mx-auto text-primary" />
