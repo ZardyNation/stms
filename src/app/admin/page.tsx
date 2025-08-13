@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Home, Pencil, LogOut, User } from 'lucide-react';
+import { Home, Pencil, LogOut, User, ThumbsUp } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Category, Nominee } from '@/types';
@@ -78,11 +78,24 @@ async function getVoteCounts(categories: Category[]) {
   return {counts: voteCounts, total: totalVotes};
 }
 
+async function getNominations() {
+    const supabase = createClient();
+    if (!supabase) return [];
+    const { data, error } = await supabase.from('nominations').select('*').order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching nominations:', error);
+        return [];
+    }
+    return data;
+}
+
 
 export default async function AdminPage() {
     const categories = await getCategories();
     const voteData = await getVoteCounts(categories);
     const voters = await getVoters();
+    const nominations = await getNominations();
     
     const categoryMap = new Map(categories.map(c => [c.id, c.title]));
     const nomineeMap = new Map(categories.flatMap(c => c.nominees).map(n => [n.id, n.name]));
@@ -123,6 +136,59 @@ export default async function AdminPage() {
                 <Card className="bg-transparent border-0 shadow-none">
                     <NomineeManager categories={categories} />
                 </Card>
+
+                 <Card className="bg-transparent border-0 shadow-none">
+                    <CardHeader>
+                        <CardTitle>Submitted Nominations</CardTitle>
+                        <CardDescription className="text-foreground">
+                           Review and manage incoming nominations.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <div className="rounded-md border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Nominee</TableHead>
+                                        <TableHead>Category</TableHead>
+                                        <TableHead>Reason</TableHead>
+                                        <TableHead>Submitted By</TableHead>
+                                        <TableHead className="text-right">Date</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {nominations.length === 0 && (
+                                        <TableRow>
+                                            <TableCell colSpan={5} className="text-center h-24">No nominations yet.</TableCell>
+                                        </TableRow>
+                                    )}
+                                    {nominations.map((nomination) => (
+                                        <TableRow key={nomination.id}>
+                                            <TableCell>
+                                                <div className="font-medium">{nomination.nominee_name}</div>
+                                                <div className="text-sm text-muted-foreground">{nomination.nominee_org}</div>
+                                            </TableCell>
+                                            <TableCell>
+                                                {categoryMap.get(nomination.category_id) || 'Unknown Category'}
+                                            </TableCell>
+                                             <TableCell className="max-w-xs truncate">
+                                                {nomination.reason}
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="font-medium">{nomination.nominator_name}</div>
+                                                <div className="text-sm text-muted-foreground">{nomination.nominator_email}</div>
+                                            </TableCell>
+                                             <TableCell className="text-right">
+                                                {new Date(nomination.created_at).toLocaleDateString()}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </CardContent>
+                </Card>
+
                 <Card className="bg-transparent border-0 shadow-none">
                     <CardHeader>
                         <CardTitle>Live Vote Counts</CardTitle>
