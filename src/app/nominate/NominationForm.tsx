@@ -1,8 +1,7 @@
 
 'use client';
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,7 +40,7 @@ const initialState: FormState = {
 
 export default function NominationForm({ categories }: NominationFormProps) {
   const { toast } = useToast();
-  const [state, formAction] = useActionState<FormState, FormData>(submitNomination, initialState);
+  const [state, formAction] = useFormState<FormState, FormData>(submitNomination, initialState);
 
   useEffect(() => {
     if (state.status === 'error' && state.message) {
