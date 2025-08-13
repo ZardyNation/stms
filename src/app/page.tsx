@@ -43,7 +43,7 @@ export default async function Home() {
                             alt="Host Photo"
                             width={150}
                             height={150}
-                            className="rounded-full w-24 h-24 sm:w-32 sm:h-32 object-cover"
+                            className="rounded-full w-32 h-32 sm:w-40 sm:h-40 object-cover"
                             data-ai-hint="professional woman"
                         />
                         <div>
