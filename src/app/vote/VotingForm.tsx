@@ -114,8 +114,53 @@ export default function VotingForm({ categories }: VotingFormProps) {
     <>
       <form onSubmit={handleFormSubmit} className="space-y-12 max-w-7xl mx-auto">
         <section id="categories">
-            <div className="space-y-8">
-              {/* Categories removed as requested */}
+             <div className="space-y-8">
+              {categories.filter(c => !c.tbd).map((category) => (
+                <Card key={category.id} className="bg-card shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-2xl">
+                        <Trophy className="text-primary" /> 
+                        {category.title}
+                    </CardTitle>
+                    <CardDescription className="text-foreground/80 pl-8 pt-1">
+                      {rhymingDescriptions[category.title] || 'Vote for your favorite nominee in this category.'}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {category.nominees.length > 0 ? (
+                      <RadioGroup name={category.id} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {category.nominees.map((nominee) => (
+                          <div key={nominee.id}>
+                            <RadioGroupItem value={nominee.id} id={`${category.id}-${nominee.id}`} className="peer sr-only" />
+                            <Label
+                              htmlFor={`${category.id}-${nominee.id}`}
+                              className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary transition-all cursor-pointer"
+                            >
+                              <Image
+                                src={nominee.photo}
+                                alt={`Photo of ${nominee.name}`}
+                                width={128}
+                                height={128}
+                                className="mb-3 h-32 w-32 rounded-full object-cover ring-2 ring-primary/50"
+                                data-ai-hint={nominee.aiHint || 'person'}
+                              />
+                              <p className="font-bold text-lg text-center">{nominee.name}</p>
+                              <p className="text-sm text-center text-muted-foreground">{nominee.organization}</p>
+                               <Link href={`/nominees/${nominee.id}`} className="text-xs text-primary hover:underline mt-2" onClick={e => e.stopPropagation()}>
+                                View Details
+                              </Link>
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    ) : (
+                      <p className="text-center text-muted-foreground py-8">
+                        Nominees for this category will be announced soon.
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
             </div>
         </section>
 
