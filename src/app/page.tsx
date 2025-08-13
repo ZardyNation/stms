@@ -53,15 +53,7 @@ export default async function Home() {
                     </CardContent>
                 </Card>
                  <Card className="bg-card text-left">
-                    <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-6">
-                         <Image 
-                            src="https://placehold.co/150x150.png"
-                            alt="Fashion Show Photo"
-                            width={150}
-                            height={150}
-                            className="rounded-full w-24 h-24 sm:w-32 sm:h-32 object-cover"
-                            data-ai-hint="fashion runway model"
-                        />
+                    <CardContent className="p-6 flex flex-col items-center justify-center text-center">
                         <div>
                             <h3 className="text-xl font-bold tracking-tight">Live Performances, Fashion Show and More</h3>
                             <p className="text-lg font-semibold text-foreground my-1">Fashion Presented by Face2Face Talent & Modeling Agency - Terri Steven’s</p>
