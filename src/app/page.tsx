@@ -186,6 +186,7 @@ export default async function Home() {
         
       </main>
       <footer className="container mx-auto py-4 text-center text-sm text-foreground">
+        <p>Voting closes September 20, 2025 at 11:59 PM EST — every vote counts!</p>
         <p>Please note: One vote per category per user. All duplicate entries will be invalidated.</p>
         <p>&copy; 2024 Impact Awards. All Rights Reserved.</p>
       </footer>
