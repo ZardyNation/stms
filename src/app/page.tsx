@@ -25,7 +25,7 @@ export default async function Home() {
                    🌟 The Impact Awards 2025 — A Night to Honor, Inspire, and Celebrate
                 </h1>
                 <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">
-                    Join us on Saturday, October 12, 2025, for the Grand Finale of Stop the Madness Week — an unforgettable evening featuring The Impact Awards Ceremony, a runway-stopping fashion show, live performances, and a dazzling Gold Carpet experience.
+                    Join us on Sunday, October 12, 2025, for the Grand Finale of Stop the Madness Week — an unforgettable evening featuring The Impact Awards Ceremony, a runway-stopping fashion show, live performances, and a dazzling Gold Carpet experience.
                 </p>
             </div>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
