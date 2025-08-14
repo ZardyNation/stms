@@ -15,8 +15,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <head>
+        <link rel="icon" href="/favicon.jpg" type="image/jpg" />
+      </head>
       <body className="font-sans antialiased bg-background text-foreground">
         <Sparkles />
         {children}
