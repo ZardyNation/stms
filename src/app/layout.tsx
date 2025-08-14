@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Impact Awards 2025 | Honor, Inspire, Celebrate',
   description: 'Join us for The Impact Awards 2025, a night to honor, inspire, and celebrate the change-makers in our community. Nominate, vote, and get tickets now!',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/hostess.jpg',
   },
 };
 
